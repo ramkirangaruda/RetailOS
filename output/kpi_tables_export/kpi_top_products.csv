@@ -1,0 +1,501 @@
+product_id,product_name,category,brand,total_quantity_sold,total_revenue,transaction_count
+P0109,Electronics Item 109,Electronics,,682,32544358.0,223
+P0287,Electronics Item 287,Electronics,,633,30746709.0,219
+P0105,Electronics Item 105,Electronics,,605,30147755.0,212
+P0108,Electronics Item 108,Electronics,,690,29431950.0,222
+P0188,Electronics Item 188,Electronics,,584,28982168.0,196
+P0409,Electronics Item 409,Electronics,,648,28714176.0,212
+P0341,Electronics Item 341,Electronics,,625,28700000.0,212
+P0333,Electronics Item 333,Electronics,,672,27693792.0,227
+P0194,Electronics Item 194,Electronics,,621,27014742.0,202
+P0081,Electronics Item 81,Electronics,,541,26863896.0,186
+P0316,Electronics Item 316,Electronics,,554,26806398.0,198
+P0257,Electronics Item 257,Electronics,,610,26292220.0,203
+P0334,Electronics Item 334,Electronics,,567,26059887.0,188
+P0455,Electronics Item 455,Electronics,,595,25846800.0,202
+P0312,Electronics Item 312,Electronics,,648,24776928.0,218
+P0136,Electronics Item 136,Electronics,,567,24627645.0,199
+P0155,Electronics Item 155,Electronics,,567,23909823.0,202
+P0056,Electronics Item 56,Electronics,,579,23724525.0,194
+P0003,Electronics Item 3,Electronics,,613,23650153.0,185
+P0014,Electronics Item 14,Electronics,,556,23583852.0,194
+P0298,Electronics Item 298,Electronics,,617,23465127.0,211
+P0128,Electronics Item 128,Electronics,,647,22686408.0,211
+P0069,Electronics Item 69,Electronics,,615,21986865.0,201
+P0450,Electronics Item 450,Electronics,,545,21984210.0,189
+P0279,Electronics Item 279,Electronics,,562,21886528.0,190
+P0038,Electronics Item 38,Electronics,,576,21689280.0,190
+P0263,Electronics Item 263,Electronics,,555,21613920.0,194
+P0206,Electronics Item 206,Electronics,,579,21471057.0,192
+P0068,Electronics Item 68,Electronics,,591,21429069.0,199
+P0489,Electronics Item 489,Electronics,,643,21325738.0,212
+P0478,Electronics Item 478,Electronics,,537,20994015.0,181
+P0209,Electronics Item 209,Electronics,,539,20487390.0,178
+P0276,Electronics Item 276,Electronics,,617,20380127.0,201
+P0212,Electronics Item 212,Electronics,,610,20123900.0,206
+P0330,Electronics Item 330,Electronics,,689,19980311.0,229
+P0077,Electronics Item 77,Electronics,,555,19881210.0,189
+P0385,Electronics Item 385,Electronics,,551,19720290.0,180
+P0356,Electronics Item 356,Electronics,,613,19122535.0,197
+P0111,Electronics Item 111,Electronics,,592,18996688.0,200
+P0406,Electronics Item 406,Electronics,,596,18397328.0,200
+P0240,Electronics Item 240,Electronics,,549,18382167.0,193
+P0482,Electronics Item 482,Electronics,,605,18340575.0,191
+P0281,Electronics Item 281,Electronics,,556,18161184.0,193
+P0115,Electronics Item 115,Electronics,,597,17412102.0,191
+P0165,Electronics Item 165,Electronics,,472,17239328.0,165
+P0310,Electronics Item 310,Electronics,,662,16937270.0,221
+P0176,Electronics Item 176,Electronics,,608,16433632.0,193
+P0018,Electronics Item 18,Electronics,,634,16264636.0,204
+P0046,Electronics Item 46,Electronics,,565,16248270.0,196
+P0470,Electronics Item 470,Electronics,,595,16134615.0,193
+P0173,Electronics Item 173,Electronics,,531,15875838.0,184
+P0469,Electronics Item 469,Electronics,,540,15681600.0,189
+P0112,Electronics Item 112,Electronics,,565,15464615.0,198
+P0032,Electronics Item 32,Electronics,,626,15445924.0,203
+P0484,Electronics Item 484,Electronics,,589,15311644.0,203
+P0289,Electronics Item 289,Electronics,,584,15262840.0,194
+P0466,Electronics Item 466,Electronics,,616,14946624.0,206
+P0400,Electronics Item 400,Electronics,,608,14649760.0,193
+P0131,Electronics Item 131,Electronics,,600,14293200.0,202
+P0193,Electronics Item 193,Electronics,,639,13934673.0,215
+P0167,Electronics Item 167,Electronics,,543,13616268.0,176
+P0344,Electronics Item 344,Electronics,,595,13417845.0,198
+P0465,Electronics Item 465,Electronics,,613,13314973.0,210
+P0201,Electronics Item 201,Electronics,,606,12970824.0,214
+P0145,Electronics Item 145,Electronics,,636,12950868.0,200
+P0366,Electronics Item 366,Electronics,,613,12815378.0,205
+P0349,Electronics Item 349,Electronics,,568,12577792.0,193
+P0156,Electronics Item 156,Electronics,,604,12568032.0,202
+P0259,Electronics Item 259,Electronics,,610,12234160.0,205
+P0152,Electronics Item 152,Electronics,,524,11954012.0,179
+P0477,Electronics Item 477,Electronics,,674,11892056.0,217
+P0434,Electronics Item 434,Electronics,,562,11810992.0,196
+P0461,Electronics Item 461,Electronics,,556,11529772.0,177
+P0185,Electronics Item 185,Electronics,,607,11188224.0,203
+P0291,Electronics Item 291,Electronics,,616,10767064.0,203
+P0103,Electronics Item 103,Electronics,,525,10567725.0,181
+P0379,Electronics Item 379,Electronics,,588,10130064.0,190
+P0231,Electronics Item 231,Electronics,,644,9933056.0,212
+P0233,Electronics Item 233,Electronics,,600,9738600.0,201
+P0307,Electronics Item 307,Electronics,,631,9381708.0,217
+P0050,Electronics Item 50,Electronics,,533,9043944.0,170
+P0237,Electronics Item 237,Electronics,,589,9025836.0,193
+P0475,Electronics Item 475,Electronics,,620,8332800.0,221
+P0258,Electronics Item 258,Electronics,,614,8171112.0,203
+P0097,Electronics Item 97,Electronics,,634,7931974.0,223
+P0065,Electronics Item 65,Electronics,,549,7670079.0,200
+P0216,Electronics Item 216,Electronics,,633,7209870.0,206
+P0345,Electronics Item 345,Electronics,,553,7201166.0,177
+P0227,Electronics Item 227,Electronics,,565,7189625.0,189
+P0066,Electronics Item 66,Electronics,,637,7122297.0,212
+P0447,Electronics Item 447,Electronics,,542,7085024.0,196
+P0408,Electronics Item 408,Electronics,,645,7031790.0,210
+P0182,Electronics Item 182,Electronics,,592,6963104.0,198
+P0031,Electronics Item 31,Electronics,,555,6651120.0,184
+P0498,Electronics Item 498,Electronics,,526,6622340.0,185
+P0047,Electronics Item 47,Electronics,,566,6359576.0,180
+P0293,Home & Kitchen Item 293,Home & Kitchen,,626,6154206.0,207
+P0410,Home & Kitchen Item 410,Home & Kitchen,,616,5926536.0,199
+P0024,Home & Kitchen Item 24,Home & Kitchen,,650,5914350.0,208
+P0084,Home & Kitchen Item 84,Home & Kitchen,,580,5783180.0,189
+P0436,Home & Kitchen Item 436,Home & Kitchen,,622,5690056.0,202
+P0493,Home & Kitchen Item 493,Home & Kitchen,,632,5656400.0,198
+P0126,Home & Kitchen Item 126,Home & Kitchen,,652,5603940.0,224
+P0352,Home & Kitchen Item 352,Home & Kitchen,,610,5591260.0,197
+P0420,Electronics Item 420,Electronics,,529,5552384.0,181
+P0135,Home & Kitchen Item 135,Home & Kitchen,,566,5476616.0,191
+P0117,Home & Kitchen Item 117,Home & Kitchen,,576,5472576.0,187
+P0313,Home & Kitchen Item 313,Home & Kitchen,,631,5461936.0,212
+P0425,Home & Kitchen Item 425,Home & Kitchen,,558,5352336.0,187
+P0306,Home & Kitchen Item 306,Home & Kitchen,,556,5313136.0,198
+P0311,Home & Kitchen Item 311,Home & Kitchen,,607,5269974.0,208
+P0445,Electronics Item 445,Electronics,,523,5228431.0,186
+P0424,Home & Kitchen Item 424,Home & Kitchen,,537,4942011.0,185
+P0480,Home & Kitchen Item 480,Home & Kitchen,,621,4668678.0,206
+P0249,Home & Kitchen Item 249,Home & Kitchen,,584,4649224.0,201
+P0002,Home & Kitchen Item 2,Home & Kitchen,,573,4632132.0,192
+P0288,Electronics Item 288,Electronics,,660,4612080.0,206
+P0472,Home & Kitchen Item 472,Home & Kitchen,,565,4532995.0,194
+P0141,Home & Kitchen Item 141,Home & Kitchen,,607,4491193.0,198
+P0091,Home & Kitchen Item 91,Home & Kitchen,,569,4405198.0,191
+P0324,Home & Kitchen Item 324,Home & Kitchen,,606,4355928.0,208
+P0012,Electronics Item 12,Electronics,,589,4349176.0,198
+P0186,Home & Kitchen Item 186,Home & Kitchen,,558,4327848.0,193
+P0137,Home & Kitchen Item 137,Home & Kitchen,,630,4220370.0,213
+P0232,Home & Kitchen Item 232,Home & Kitchen,,581,4179714.0,184
+P0428,Electronics Item 428,Electronics,,591,4093266.0,200
+P0146,Home & Kitchen Item 146,Home & Kitchen,,554,4044200.0,187
+P0435,Home & Kitchen Item 435,Home & Kitchen,,622,4023718.0,202
+P0314,Electronics Item 314,Electronics,,506,3993858.0,171
+P0030,Home & Kitchen Item 30,Home & Kitchen,,650,3774550.0,204
+P0417,Home & Kitchen Item 417,Home & Kitchen,,571,3592732.0,193
+P0041,Electronics Item 41,Electronics,,535,3591455.0,181
+P0095,Home & Kitchen Item 95,Home & Kitchen,,679,3515183.0,207
+P0305,Home & Kitchen Item 305,Home & Kitchen,,613,3497165.0,204
+P0386,Home & Kitchen Item 386,Home & Kitchen,,577,3485657.0,192
+P0374,Home & Kitchen Item 374,Home & Kitchen,,600,3466200.0,197
+P0286,Electronics Item 286,Electronics,,598,3441490.0,202
+P0178,Apparel Item 178,Apparel,,699,3398538.0,236
+P0422,Home & Kitchen Item 422,Home & Kitchen,,534,3398376.0,178
+P0010,Home & Kitchen Item 10,Home & Kitchen,,537,3371823.0,185
+P0269,Apparel Item 269,Apparel,,666,3273390.0,227
+P0123,Home & Kitchen Item 123,Home & Kitchen,,585,3209895.0,201
+P0426,Electronics Item 426,Electronics,,551,3140149.0,188
+P0380,Home & Kitchen Item 380,Home & Kitchen,,652,3098956.0,214
+P0467,Apparel Item 467,Apparel,,649,3087293.0,214
+P0346,Home & Kitchen Item 346,Home & Kitchen,,590,3033780.0,196
+P0387,Home & Kitchen Item 387,Home & Kitchen,,542,3026528.0,197
+P0044,Apparel Item 44,Apparel,,619,2971200.0,207
+P0462,Home & Kitchen Item 462,Home & Kitchen,,529,2912145.0,177
+P0168,Home & Kitchen Item 168,Home & Kitchen,,567,2900205.0,190
+P0362,Apparel Item 362,Apparel,,606,2892438.0,206
+P0158,Apparel Item 158,Apparel,,596,2885236.0,198
+P0355,Apparel Item 355,Apparel,,596,2877488.0,194
+P0204,Home & Kitchen Item 204,Home & Kitchen,,518,2869202.0,174
+P0396,Apparel Item 396,Apparel,,665,2868810.0,219
+P0159,Apparel Item 159,Apparel,,626,2861446.0,212
+P0351,Apparel Item 351,Apparel,,570,2840880.0,192
+P0264,Apparel Item 264,Apparel,,576,2831040.0,182
+P0471,Apparel Item 471,Apparel,,623,2824059.0,201
+P0086,Home & Kitchen Item 86,Home & Kitchen,,633,2821281.0,204
+P0143,Home & Kitchen Item 143,Home & Kitchen,,605,2790865.0,211
+P0225,Home & Kitchen Item 225,Home & Kitchen,,594,2789424.0,200
+P0147,Apparel Item 147,Apparel,,595,2781625.0,201
+P0013,Home & Kitchen Item 13,Home & Kitchen,,681,2779161.0,217
+P0353,Apparel Item 353,Apparel,,585,2763540.0,198
+P0277,Home & Kitchen Item 277,Home & Kitchen,,626,2731238.0,209
+P0122,Apparel Item 122,Apparel,,605,2730365.0,202
+P0452,Apparel Item 452,Apparel,,727,2727704.0,230
+P0491,Apparel Item 491,Apparel,,645,2627085.0,210
+P0079,Apparel Item 79,Apparel,,560,2618000.0,189
+P0008,Apparel Item 8,Apparel,,566,2574734.0,194
+P0004,Home & Kitchen Item 4,Home & Kitchen,,569,2548551.0,202
+P0415,Apparel Item 415,Apparel,,550,2494250.0,188
+P0336,Home & Kitchen Item 336,Home & Kitchen,,564,2484984.0,184
+P0139,Apparel Item 139,Apparel,,587,2454247.0,202
+P0215,Home & Kitchen Item 215,Home & Kitchen,,653,2410223.0,198
+P0207,Apparel Item 207,Apparel,,620,2401260.0,215
+P0359,Apparel Item 359,Apparel,,633,2390841.0,206
+P0180,Apparel Item 180,Apparel,,584,2352936.0,194
+P0326,Apparel Item 326,Apparel,,599,2325917.0,204
+P0337,Apparel Item 337,Apparel,,600,2316000.0,199
+P0483,Apparel Item 483,Apparel,,538,2276816.0,191
+P0113,Apparel Item 113,Apparel,,546,2272452.0,184
+P0332,Apparel Item 332,Apparel,,633,2262342.0,206
+P0174,Home & Kitchen Item 174,Home & Kitchen,,530,2233950.0,185
+P0098,Home & Kitchen Item 98,Home & Kitchen,,540,2231280.0,192
+P0130,Apparel Item 130,Apparel,,569,2211134.0,200
+P0184,Apparel Item 184,Apparel,,571,2206344.0,189
+P0479,Apparel Item 479,Apparel,,633,2189547.0,215
+P0318,Apparel Item 318,Apparel,,609,2189355.0,193
+P0280,Apparel Item 280,Apparel,,531,2189313.0,176
+P0375,Home & Kitchen Item 375,Home & Kitchen,,613,2185958.0,210
+P0456,Apparel Item 456,Apparel,,569,2182684.0,202
+P0170,Apparel Item 170,Apparel,,575,2180400.0,185
+P0080,Apparel Item 80,Apparel,,567,2177847.0,185
+P0239,Apparel Item 239,Apparel,,556,2168400.0,180
+P0354,Apparel Item 354,Apparel,,601,2161797.0,193
+P0034,Home & Kitchen Item 34,Home & Kitchen,,610,2139270.0,200
+P0230,Home & Kitchen Item 230,Home & Kitchen,,605,2130205.0,210
+P0262,Home & Kitchen Item 262,Home & Kitchen,,655,2105825.0,207
+P0088,Home & Kitchen Item 88,Home & Kitchen,,506,2101418.0,182
+P0120,Apparel Item 120,Apparel,,564,2080032.0,192
+P0246,Home & Kitchen Item 246,Home & Kitchen,,579,2071662.0,191
+P0144,Home & Kitchen Item 144,Home & Kitchen,,645,2055615.0,210
+P0250,Apparel Item 250,Apparel,,495,2052270.0,164
+P0228,Apparel Item 228,Apparel,,584,2045752.0,191
+P0254,Apparel Item 254,Apparel,,524,2003776.0,181
+P0442,Apparel Item 442,Apparel,,517,1917553.0,172
+P0494,Home & Kitchen Item 494,Home & Kitchen,,564,1881504.0,189
+P0175,Apparel Item 175,Apparel,,589,1861240.0,206
+P0132,Apparel Item 132,Apparel,,639,1802619.0,210
+P0106,Home & Kitchen Item 106,Home & Kitchen,,558,1773324.0,177
+P0383,Apparel Item 383,Apparel,,602,1750014.0,201
+P0296,Apparel Item 296,Apparel,,514,1744516.0,179
+P0499,Apparel Item 499,Apparel,,582,1740180.0,197
+P0308,Apparel Item 308,Apparel,,605,1734535.0,203
+P0327,Apparel Item 327,Apparel,,638,1727066.0,208
+P0195,Home & Kitchen Item 195,Home & Kitchen,,580,1722600.0,200
+P0223,Apparel Item 223,Apparel,,580,1691280.0,203
+P0236,Home & Kitchen Item 236,Home & Kitchen,,607,1686246.0,203
+P0367,Home & Kitchen Item 367,Home & Kitchen,,528,1656864.0,189
+P0107,Apparel Item 107,Apparel,,591,1634115.0,199
+P0411,Home & Kitchen Item 411,Home & Kitchen,,533,1613391.0,176
+P0278,Apparel Item 278,Apparel,,676,1558856.0,214
+P0431,Home & Kitchen Item 431,Home & Kitchen,,548,1553580.0,184
+P0284,Apparel Item 284,Apparel,,546,1508598.0,187
+P0292,Home & Kitchen Item 292,Home & Kitchen,,575,1500175.0,190
+P0033,Apparel Item 33,Apparel,,568,1485320.0,187
+P0458,Apparel Item 458,Apparel,,645,1461570.0,206
+P0140,Apparel Item 140,Apparel,,525,1447425.0,164
+P0423,Home & Kitchen Item 423,Home & Kitchen,,558,1429038.0,194
+P0019,Home & Kitchen Item 19,Home & Kitchen,,594,1423224.0,210
+P0007,Home & Kitchen Item 7,Home & Kitchen,,673,1410608.0,214
+P0036,Home & Kitchen Item 36,Home & Kitchen,,625,1386250.0,207
+P0063,Home & Kitchen Item 63,Home & Kitchen,,545,1375035.0,198
+P0427,Apparel Item 427,Apparel,,608,1343072.0,201
+P0222,Apparel Item 222,Apparel,,620,1313780.0,210
+P0224,Home & Kitchen Item 224,Home & Kitchen,,650,1301950.0,220
+P0190,Apparel Item 190,Apparel,,564,1301712.0,194
+P0191,Apparel Item 191,Apparel,,561,1284129.0,189
+P0005,Apparel Item 5,Apparel,,622,1279454.0,197
+P0486,Apparel Item 486,Apparel,,557,1275530.0,189
+P0401,Apparel Item 401,Apparel,,583,1268608.0,199
+P0100,Apparel Item 100,Apparel,,630,1266300.0,209
+P0241,Apparel Item 241,Apparel,,670,1246870.0,225
+P0464,Home & Kitchen Item 464,Home & Kitchen,,545,1230065.0,191
+P0001,Grocery Item 1,Grocery,,683,1227351.0,225
+P0317,Grocery Item 317,Grocery,,644,1200416.0,207
+P0221,Apparel Item 221,Apparel,,570,1199280.0,195
+P0407,Apparel Item 407,Apparel,,699,1158942.0,231
+P0402,Apparel Item 402,Apparel,,520,1149720.0,187
+P0062,Grocery Item 62,Grocery,,593,1145083.0,191
+P0213,Grocery Item 213,Grocery,,583,1145012.0,192
+P0376,Grocery Item 376,Grocery,,574,1140538.0,190
+P0454,Grocery Item 454,Grocery,,640,1130240.0,204
+P0487,Grocery Item 487,Grocery,,598,1129024.0,200
+P0166,Apparel Item 166,Apparel,,547,1112598.0,187
+P0199,Grocery Item 199,Grocery,,571,1108311.0,196
+P0350,Grocery Item 350,Grocery,,612,1104660.0,194
+P0119,Apparel Item 119,Apparel,,646,1094970.0,209
+P0229,Grocery Item 229,Grocery,,619,1088821.0,208
+P0219,Apparel Item 219,Apparel,,609,1087065.0,200
+P0331,Grocery Item 331,Grocery,,625,1082500.0,202
+P0061,Home & Kitchen Item 61,Home & Kitchen,,646,1076882.0,220
+P0457,Apparel Item 457,Apparel,,558,1058526.0,188
+P0124,Home & Kitchen Item 124,Home & Kitchen,,583,1049983.0,198
+P0149,Grocery Item 149,Grocery,,679,1036833.0,220
+P0114,Apparel Item 114,Apparel,,605,1030920.0,189
+P0275,Apparel Item 275,Apparel,,513,1005480.0,169
+P0377,Grocery Item 377,Grocery,,627,1003827.0,214
+P0371,Grocery Item 371,Grocery,,607,997301.0,201
+P0497,Grocery Item 497,Grocery,,624,989040.0,209
+P0335,Home & Kitchen Item 335,Home & Kitchen,,529,988172.0,182
+P0430,Grocery Item 430,Grocery,,600,986400.0,202
+P0148,Apparel Item 148,Apparel,,703,983497.0,223
+P0361,Grocery Item 361,Grocery,,628,964608.0,201
+P0058,Grocery Item 58,Grocery,,505,962530.0,176
+P0048,Grocery Item 48,Grocery,,592,960224.0,194
+P0138,Grocery Item 138,Grocery,,699,956931.0,219
+P0363,Personal Care Item 363,Personal Care,,672,954912.0,216
+P0299,Grocery Item 299,Grocery,,596,948236.0,192
+P0078,Apparel Item 78,Apparel,,612,940644.0,198
+P0419,Home & Kitchen Item 419,Home & Kitchen,,597,936693.0,183
+P0378,Grocery Item 378,Grocery,,513,935712.0,172
+P0162,Grocery Item 162,Grocery,,571,926733.0,198
+P0448,Personal Care Item 448,Personal Care,,655,922895.0,217
+P0373,Home & Kitchen Item 373,Home & Kitchen,,550,917400.0,185
+P0416,Apparel Item 416,Apparel,,572,916916.0,186
+P0437,Grocery Item 437,Grocery,,590,910370.0,195
+P0102,Apparel Item 102,Apparel,,570,903450.0,192
+P0441,Personal Care Item 441,Personal Care,,605,902660.0,200
+P0473,Home & Kitchen Item 473,Home & Kitchen,,511,898849.0,164
+P0265,Apparel Item 265,Apparel,,584,896440.0,195
+P0110,Apparel Item 110,Apparel,,634,892038.0,200
+P0099,Grocery Item 99,Grocery,,608,890720.0,196
+P0382,Personal Care Item 382,Personal Care,,590,884410.0,199
+P0087,Personal Care Item 87,Personal Care,,603,883395.0,203
+P0321,Grocery Item 321,Grocery,,576,882432.0,192
+P0242,Grocery Item 242,Grocery,,577,871847.0,181
+P0214,Grocery Item 214,Grocery,,545,867640.0,189
+P0073,Personal Care Item 73,Personal Care,,688,859312.0,223
+P0446,Grocery Item 446,Grocery,,662,851332.0,214
+P0196,Grocery Item 196,Grocery,,623,851018.0,212
+P0399,Grocery Item 399,Grocery,,584,850304.0,189
+P0360,Personal Care Item 360,Personal Care,,571,849648.0,194
+P0438,Grocery Item 438,Grocery,,489,848415.0,167
+P0476,Home & Kitchen Item 476,Home & Kitchen,,651,842394.0,218
+P0039,Grocery Item 39,Grocery,,531,829422.0,195
+P0490,Personal Care Item 490,Personal Care,,676,828776.0,222
+P0134,Home & Kitchen Item 134,Home & Kitchen,,673,824425.0,228
+P0016,Grocery Item 16,Grocery,,597,822666.0,205
+P0151,Grocery Item 151,Grocery,,561,820182.0,181
+P0057,Personal Care Item 57,Personal Care,,670,816060.0,219
+P0076,Apparel Item 76,Apparel,,595,803250.0,200
+P0319,Grocery Item 319,Grocery,,590,798270.0,192
+P0059,Personal Care Item 59,Personal Care,,547,791509.0,198
+P0200,Apparel Item 200,Apparel,,536,789528.0,182
+P0338,Personal Care Item 338,Personal Care,,580,787060.0,198
+P0244,Personal Care Item 244,Personal Care,,600,786600.0,201
+P0171,Personal Care Item 171,Personal Care,,624,784368.0,198
+P0169,Grocery Item 169,Grocery,,624,780000.0,192
+P0309,Personal Care Item 309,Personal Care,,567,778491.0,189
+P0267,Personal Care Item 267,Personal Care,,579,777018.0,199
+P0025,Personal Care Item 25,Personal Care,,630,774270.0,220
+P0045,Personal Care Item 45,Personal Care,,581,770987.0,194
+P0020,Apparel Item 20,Apparel,,598,769028.0,204
+P0368,Grocery Item 368,Grocery,,500,764500.0,168
+P0006,Personal Care Item 6,Personal Care,,538,755890.0,181
+P0391,Apparel Item 391,Apparel,,540,751680.0,182
+P0303,Personal Care Item 303,Personal Care,,512,751616.0,174
+P0074,Apparel Item 74,Apparel,,636,744756.0,198
+P0252,Grocery Item 252,Grocery,,574,741034.0,188
+P0198,Apparel Item 198,Apparel,,584,738760.0,192
+P0261,Personal Care Item 261,Personal Care,,683,738323.0,220
+P0247,Personal Care Item 247,Personal Care,,612,728892.0,201
+P0459,Personal Care Item 459,Personal Care,,546,727272.0,181
+P0421,Personal Care Item 421,Personal Care,,640,725760.0,213
+P0485,Apparel Item 485,Apparel,,549,723582.0,186
+P0443,Grocery Item 443,Grocery,,557,722986.0,207
+P0154,Home & Kitchen Item 154,Home & Kitchen,,538,716616.0,177
+P0202,Personal Care Item 202,Personal Care,,592,709808.0,197
+P0370,Apparel Item 370,Apparel,,524,708448.0,182
+P0021,Personal Care Item 21,Personal Care,,605,705430.0,196
+P0055,Personal Care Item 55,Personal Care,,579,699432.0,194
+P0393,Personal Care Item 393,Personal Care,,621,698625.0,209
+P0283,Grocery Item 283,Grocery,,693,688149.0,222
+P0440,Home & Kitchen Item 440,Home & Kitchen,,655,687750.0,212
+P0029,Grocery Item 29,Grocery,,595,683655.0,194
+P0301,Apparel Item 301,Apparel,,571,682916.0,193
+P0433,Personal Care Item 433,Personal Care,,581,680932.0,197
+P0271,Grocery Item 271,Grocery,,604,679500.0,204
+P0043,Apparel Item 43,Apparel,,526,663812.0,177
+P0348,Personal Care Item 348,Personal Care,,559,661297.0,193
+P0414,Apparel Item 414,Apparel,,528,658944.0,180
+P0127,Apparel Item 127,Apparel,,644,645932.0,207
+P0177,Grocery Item 177,Grocery,,636,645540.0,205
+P0388,Grocery Item 388,Grocery,,585,643500.0,189
+P0304,Personal Care Item 304,Personal Care,,532,641060.0,186
+P0179,Grocery Item 179,Grocery,,605,640695.0,190
+P0163,Personal Care Item 163,Personal Care,,661,633899.0,211
+P0243,Personal Care Item 243,Personal Care,,512,632832.0,172
+P0453,Personal Care Item 453,Personal Care,,587,632199.0,201
+P0096,Personal Care Item 96,Personal Care,,560,626640.0,182
+P0369,Personal Care Item 369,Personal Care,,634,622588.0,213
+P0009,Personal Care Item 9,Personal Care,,600,622200.0,211
+P0290,Apparel Item 290,Apparel,,530,616920.0,185
+P0339,Personal Care Item 339,Personal Care,,592,616864.0,205
+P0389,Personal Care Item 389,Personal Care,,519,615534.0,179
+P0189,Personal Care Item 189,Personal Care,,608,609824.0,213
+P0150,Grocery Item 150,Grocery,,544,608736.0,178
+P0343,Apparel Item 343,Apparel,,584,600352.0,185
+P0017,Grocery Item 17,Grocery,,661,595561.0,216
+P0197,Personal Care Item 197,Personal Care,,581,593201.0,191
+P0118,Grocery Item 118,Grocery,,615,589170.0,198
+P0364,Grocery Item 364,Grocery,,661,584324.0,216
+P0274,Grocery Item 274,Grocery,,496,582304.0,167
+P0256,Personal Care Item 256,Personal Care,,546,574392.0,170
+P0358,Apparel Item 358,Apparel,,554,573944.0,198
+P0468,Personal Care Item 468,Personal Care,,614,573476.0,208
+P0266,Apparel Item 266,Apparel,,604,552660.0,200
+P0238,Apparel Item 238,Apparel,,502,551698.0,173
+P0037,Personal Care Item 37,Personal Care,,636,537420.0,213
+P0104,Apparel Item 104,Apparel,,609,536529.0,206
+P0297,Grocery Item 297,Grocery,,621,512946.0,207
+P0070,Grocery Item 70,Grocery,,582,512742.0,190
+P0220,Apparel Item 220,Apparel,,587,510690.0,185
+P0053,Apparel Item 53,Apparel,,565,509630.0,189
+P0040,Grocery Item 40,Grocery,,577,509491.0,190
+P0203,Apparel Item 203,Apparel,,581,500241.0,190
+P0340,Personal Care Item 340,Personal Care,,600,496200.0,195
+P0085,Apparel Item 85,Apparel,,499,492014.0,179
+P0449,Personal Care Item 449,Personal Care,,713,489831.0,230
+P0329,Grocery Item 329,Grocery,,603,486018.0,202
+P0116,Grocery Item 116,Grocery,,544,484704.0,196
+P0488,Grocery Item 488,Grocery,,619,481582.0,200
+P0172,Personal Care Item 172,Personal Care,,580,481400.0,202
+P0245,Personal Care Item 245,Personal Care,,618,478950.0,206
+P0418,Apparel Item 418,Apparel,,552,453192.0,182
+P0251,Grocery Item 251,Grocery,,651,453096.0,217
+P0255,Grocery Item 255,Grocery,,553,452907.0,189
+P0035,Grocery Item 35,Grocery,,605,451330.0,199
+P0211,Personal Care Item 211,Personal Care,,657,438876.0,214
+P0463,Grocery Item 463,Grocery,,579,429039.0,193
+P0092,Personal Care Item 92,Personal Care,,621,427869.0,211
+P0405,Personal Care Item 405,Personal Care,,573,426885.0,190
+P0164,Personal Care Item 164,Personal Care,,533,425334.0,180
+P0089,Personal Care Item 89,Personal Care,,607,424293.0,196
+P0395,Grocery Item 395,Grocery,,563,410427.0,182
+P0322,Personal Care Item 322,Personal Care,,616,408408.0,204
+P0161,Apparel Item 161,Apparel,,617,407220.0,207
+P0054,Grocery Item 54,Grocery,,590,405330.0,196
+P0381,Grocery Item 381,Grocery,,541,403586.0,184
+P0049,Grocery Item 49,Grocery,,571,400271.0,187
+P0404,Personal Care Item 404,Personal Care,,637,399399.0,204
+P0496,Personal Care Item 496,Personal Care,,624,399360.0,202
+P0153,Personal Care Item 153,Personal Care,,537,394695.0,186
+P0042,Grocery Item 42,Grocery,,547,394387.0,181
+P0273,Grocery Item 273,Grocery,,674,393616.0,224
+P0082,Personal Care Item 82,Personal Care,,597,393423.0,213
+P0253,Apparel Item 253,Apparel,,586,389104.0,205
+P0129,Personal Care Item 129,Personal Care,,524,362608.0,177
+P0051,Personal Care Item 51,Personal Care,,677,361518.0,228
+P0064,Grocery Item 64,Grocery,,593,356393.0,201
+P0028,Grocery Item 28,Grocery,,641,354473.0,208
+P0384,Apparel Item 384,Apparel,,507,349830.0,174
+P0093,Grocery Item 93,Grocery,,613,343280.0,205
+P0300,Grocery Item 300,Grocery,,577,336968.0,194
+P0328,Personal Care Item 328,Personal Care,,579,327714.0,194
+P0157,Grocery Item 157,Grocery,,565,319790.0,194
+P0495,Personal Care Item 495,Personal Care,,590,313290.0,188
+P0392,Grocery Item 392,Grocery,,569,309536.0,188
+P0342,Personal Care Item 342,Personal Care,,646,308788.0,211
+P0248,Personal Care Item 248,Personal Care,,563,304583.0,177
+P0357,Grocery Item 357,Grocery,,523,285558.0,183
+P0210,Personal Care Item 210,Personal Care,,497,282793.0,168
+P0083,Personal Care Item 83,Personal Care,,580,280720.0,192
+P0413,Personal Care Item 413,Personal Care,,546,276276.0,174
+P0235,Personal Care Item 235,Personal Care,,600,274800.0,196
+P0394,Personal Care Item 394,Personal Care,,588,273420.0,194
+P0121,Grocery Item 121,Grocery,,615,267525.0,205
+P0451,Grocery Item 451,Grocery,,521,266752.0,171
+P0403,Grocery Item 403,Grocery,,587,262389.0,206
+P0218,Grocery Item 218,Grocery,,575,255300.0,185
+P0183,Personal Care Item 183,Personal Care,,658,250040.0,222
+P0365,Grocery Item 365,Grocery,,652,243848.0,222
+P0205,Personal Care Item 205,Personal Care,,550,243100.0,184
+P0432,Personal Care Item 432,Personal Care,,672,242592.0,214
+P0133,Grocery Item 133,Grocery,,586,241432.0,188
+P0072,Grocery Item 72,Grocery,,627,235125.0,213
+P0011,Grocery Item 11,Grocery,,512,233984.0,176
+P0323,Personal Care Item 323,Personal Care,,569,231583.0,202
+P0075,Grocery Item 75,Grocery,,586,230884.0,206
+P0142,Grocery Item 142,Grocery,,602,227556.0,201
+P0302,Personal Care Item 302,Personal Care,,552,221904.0,189
+P0347,Personal Care Item 347,Personal Care,,623,220542.0,206
+P0094,Personal Care Item 94,Personal Care,,612,217260.0,206
+P0260,Personal Care Item 260,Personal Care,,654,216474.0,210
+P0325,Personal Care Item 325,Personal Care,,597,209547.0,206
+P0226,Personal Care Item 226,Personal Care,,538,201750.0,185
+P0071,Personal Care Item 71,Personal Care,,630,200340.0,227
+P0460,Personal Care Item 460,Personal Care,,498,200196.0,178
+P0429,Personal Care Item 429,Personal Care,,629,200022.0,193
+P0022,Personal Care Item 22,Personal Care,,584,197392.0,195
+P0444,Grocery Item 444,Grocery,,609,197316.0,208
+P0101,Personal Care Item 101,Personal Care,,560,193200.0,184
+P0492,Personal Care Item 492,Personal Care,,594,191268.0,194
+P0023,Personal Care Item 23,Personal Care,,489,184842.0,173
+P0439,Personal Care Item 439,Personal Care,,525,181125.0,182
+P0090,Grocery Item 90,Grocery,,537,176136.0,187
+P0474,Personal Care Item 474,Personal Care,,590,174640.0,195
+P0026,Grocery Item 26,Grocery,,579,170805.0,183
+P0208,Grocery Item 208,Grocery,,654,166116.0,210
+P0268,Personal Care Item 268,Personal Care,,651,163401.0,207
+P0270,Personal Care Item 270,Personal Care,,594,160974.0,204
+P0481,Personal Care Item 481,Personal Care,,570,160170.0,193
+P0052,Personal Care Item 52,Personal Care,,602,157122.0,210
+P0272,Personal Care Item 272,Personal Care,,537,156267.0,182
+P0282,Personal Care Item 282,Personal Care,,590,155760.0,202
+P0187,Personal Care Item 187,Personal Care,,628,155744.0,208
+P0060,Grocery Item 60,Grocery,,596,151980.0,198
+P0192,Grocery Item 192,Grocery,,608,150784.0,196
+P0315,Personal Care Item 315,Personal Care,,721,144200.0,228
+P0320,Grocery Item 320,Grocery,,546,126126.0,183
+P0397,Personal Care Item 397,Personal Care,,544,122944.0,184
+P0372,Grocery Item 372,Grocery,,546,119028.0,177
+P0412,Personal Care Item 412,Personal Care,,554,109692.0,189
+P0027,Personal Care Item 27,Personal Care,,597,99102.0,194
+P0295,Personal Care Item 295,Personal Care,,644,97888.0,215
+P0294,Grocery Item 294,Grocery,,585,97695.0,191
+P0390,Personal Care Item 390,Personal Care,,634,92564.0,202
+P0217,Personal Care Item 217,Personal Care,,606,86658.0,199
+P0234,Grocery Item 234,Grocery,,642,77682.0,212
+P0181,Personal Care Item 181,Personal Care,,569,75677.0,186
+P0160,Personal Care Item 160,Personal Care,,662,70172.0,213
+P0285,Grocery Item 285,Grocery,,587,65157.0,200
+P0398,Grocery Item 398,Grocery,,511,64386.0,176
+P0000,Grocery Item 0,Grocery,,557,61827.0,188
+P0067,Personal Care Item 67,Personal Care,,542,58536.0,178
+P0015,Grocery Item 15,Grocery,,520,44200.0,182
+P0125,Grocery Item 125,Grocery,,556,31136.0,188

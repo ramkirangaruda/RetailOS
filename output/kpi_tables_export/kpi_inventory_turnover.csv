@@ -1,0 +1,501 @@
+product_id,product_name,category,total_sold,days_sold,avg_daily_sales,movement_category
+P0256,Personal Care Item 256,Personal Care,546,91,6.0,Medium Moving
+P0073,Personal Care Item 73,Personal Care,688,118,5.830508474576271,Medium Moving
+P0013,Home & Kitchen Item 13,Home & Kitchen,681,117,5.82051282051282,Medium Moving
+P0315,Personal Care Item 315,Personal Care,721,124,5.814516129032258,Medium Moving
+P0262,Home & Kitchen Item 262,Home & Kitchen,655,113,5.79646017699115,Medium Moving
+P0278,Apparel Item 278,Apparel,676,117,5.777777777777778,Medium Moving
+P0169,Grocery Item 169,Grocery,624,108,5.777777777777778,Medium Moving
+P0452,Apparel Item 452,Apparel,727,126,5.76984126984127,Medium Moving
+P0363,Personal Care Item 363,Personal Care,672,117,5.743589743589744,Medium Moving
+P0178,Apparel Item 178,Apparel,699,122,5.729508196721311,Medium Moving
+P0404,Personal Care Item 404,Personal Care,637,112,5.6875,Medium Moving
+P0109,Electronics Item 109,Electronics,682,120,5.683333333333334,Medium Moving
+P0138,Grocery Item 138,Grocery,699,123,5.682926829268292,Medium Moving
+P0215,Home & Kitchen Item 215,Home & Kitchen,653,115,5.678260869565217,Medium Moving
+P0211,Personal Care Item 211,Personal Care,657,116,5.663793103448276,Medium Moving
+P0458,Apparel Item 458,Apparel,645,114,5.657894736842105,Medium Moving
+P0448,Personal Care Item 448,Personal Care,655,116,5.646551724137931,Medium Moving
+P0393,Personal Care Item 393,Personal Care,621,110,5.6454545454545455,Medium Moving
+P0148,Apparel Item 148,Apparel,703,125,5.624,Medium Moving
+P0089,Personal Care Item 89,Personal Care,607,108,5.62037037037037,Medium Moving
+P0343,Apparel Item 343,Apparel,584,104,5.615384615384615,Medium Moving
+P0268,Personal Care Item 268,Personal Care,651,116,5.612068965517241,Medium Moving
+P0095,Home & Kitchen Item 95,Home & Kitchen,679,121,5.6115702479338845,Medium Moving
+P0432,Personal Care Item 432,Personal Care,672,120,5.6,Medium Moving
+P0440,Home & Kitchen Item 440,Home & Kitchen,655,117,5.598290598290598,Medium Moving
+P0407,Apparel Item 407,Apparel,699,125,5.592,Medium Moving
+P0220,Apparel Item 220,Apparel,587,105,5.59047619047619,Medium Moving
+P0057,Personal Care Item 57,Personal Care,670,120,5.583333333333333,Medium Moving
+P0365,Grocery Item 365,Grocery,652,117,5.572649572649572,Medium Moving
+P0355,Apparel Item 355,Apparel,596,107,5.570093457943925,Medium Moving
+P0429,Personal Care Item 429,Personal Care,629,113,5.566371681415929,Medium Moving
+P0454,Grocery Item 454,Grocery,640,115,5.565217391304348,Medium Moving
+P0160,Personal Care Item 160,Personal Care,662,119,5.563025210084033,Medium Moving
+P0007,Home & Kitchen Item 7,Home & Kitchen,673,121,5.56198347107438,Medium Moving
+P0018,Electronics Item 18,Electronics,634,114,5.56140350877193,Medium Moving
+P0390,Personal Care Item 390,Personal Care,634,114,5.56140350877193,Medium Moving
+P0216,Electronics Item 216,Electronics,633,114,5.552631578947368,Medium Moving
+P0467,Apparel Item 467,Apparel,649,117,5.547008547008547,Medium Moving
+P0352,Home & Kitchen Item 352,Home & Kitchen,610,110,5.545454545454546,Medium Moving
+P0493,Home & Kitchen Item 493,Home & Kitchen,632,114,5.543859649122807,Medium Moving
+P0208,Grocery Item 208,Grocery,654,118,5.5423728813559325,Medium Moving
+P0490,Personal Care Item 490,Personal Care,676,122,5.540983606557377,Medium Moving
+P0159,Apparel Item 159,Apparel,626,113,5.539823008849558,Medium Moving
+P0030,Home & Kitchen Item 30,Home & Kitchen,650,118,5.508474576271187,Medium Moving
+P0163,Personal Care Item 163,Personal Care,661,120,5.508333333333334,Medium Moving
+P0479,Apparel Item 479,Apparel,633,115,5.504347826086956,Medium Moving
+P0231,Electronics Item 231,Electronics,644,117,5.504273504273504,Medium Moving
+P0288,Electronics Item 288,Electronics,660,120,5.5,Medium Moving
+P0114,Apparel Item 114,Apparel,605,110,5.5,Medium Moving
+P0489,Electronics Item 489,Electronics,643,117,5.495726495726496,Medium Moving
+P0092,Personal Care Item 92,Personal Care,621,113,5.495575221238938,Medium Moving
+P0070,Grocery Item 70,Grocery,582,106,5.490566037735849,Medium Moving
+P0339,Personal Care Item 339,Personal Care,592,108,5.481481481481482,Medium Moving
+P0061,Home & Kitchen Item 61,Home & Kitchen,646,118,5.47457627118644,Medium Moving
+P0003,Electronics Item 3,Electronics,613,112,5.473214285714286,Medium Moving
+P0294,Grocery Item 294,Grocery,585,107,5.4672897196261685,Medium Moving
+P0144,Home & Kitchen Item 144,Home & Kitchen,645,118,5.466101694915254,Medium Moving
+P0347,Personal Care Item 347,Personal Care,623,114,5.464912280701754,Medium Moving
+P0261,Personal Care Item 261,Personal Care,683,125,5.464,Medium Moving
+P0132,Apparel Item 132,Apparel,639,117,5.461538461538462,Medium Moving
+P0480,Home & Kitchen Item 480,Home & Kitchen,621,114,5.447368421052632,Medium Moving
+P0184,Apparel Item 184,Apparel,571,105,5.438095238095238,Medium Moving
+P0219,Apparel Item 219,Apparel,609,112,5.4375,Medium Moving
+P0074,Apparel Item 74,Apparel,636,117,5.435897435897436,Medium Moving
+P0149,Grocery Item 149,Grocery,679,125,5.432,Medium Moving
+P0342,Personal Care Item 342,Personal Care,646,119,5.428571428571429,Medium Moving
+P0134,Home & Kitchen Item 134,Home & Kitchen,673,124,5.42741935483871,Medium Moving
+P0115,Electronics Item 115,Electronics,597,110,5.427272727272728,Medium Moving
+P0345,Electronics Item 345,Electronics,553,102,5.421568627450981,Medium Moving
+P0110,Apparel Item 110,Apparel,634,117,5.418803418803419,Medium Moving
+P0471,Apparel Item 471,Apparel,623,115,5.417391304347826,Medium Moving
+P0224,Home & Kitchen Item 224,Home & Kitchen,650,120,5.416666666666667,Medium Moving
+P0269,Apparel Item 269,Apparel,666,123,5.414634146341464,Medium Moving
+P0161,Apparel Item 161,Apparel,617,114,5.412280701754386,Medium Moving
+P0295,Personal Care Item 295,Personal Care,644,119,5.411764705882353,Medium Moving
+P0246,Home & Kitchen Item 246,Home & Kitchen,579,107,5.411214953271028,Medium Moving
+P0260,Personal Care Item 260,Personal Care,654,121,5.404958677685951,Medium Moving
+P0322,Personal Care Item 322,Personal Care,616,114,5.4035087719298245,Medium Moving
+P0441,Personal Care Item 441,Personal Care,605,112,5.401785714285714,Medium Moving
+P0035,Grocery Item 35,Grocery,605,112,5.401785714285714,Medium Moving
+P0449,Personal Care Item 449,Personal Care,713,132,5.401515151515151,Medium Moving
+P0194,Electronics Item 194,Electronics,621,115,5.4,Medium Moving
+P0212,Electronics Item 212,Electronics,610,113,5.398230088495575,Medium Moving
+P0118,Grocery Item 118,Grocery,615,114,5.394736842105263,Medium Moving
+P0128,Electronics Item 128,Electronics,647,120,5.391666666666667,Medium Moving
+P0037,Personal Care Item 37,Personal Care,636,118,5.389830508474576,Medium Moving
+P0028,Grocery Item 28,Grocery,641,119,5.38655462184874,Medium Moving
+P0488,Grocery Item 488,Grocery,619,115,5.3826086956521735,Medium Moving
+P0446,Grocery Item 446,Grocery,662,123,5.382113821138211,Medium Moving
+P0176,Electronics Item 176,Electronics,608,113,5.380530973451328,Medium Moving
+P0251,Grocery Item 251,Grocery,651,121,5.380165289256198,Medium Moving
+P0421,Personal Care Item 421,Personal Care,640,119,5.378151260504202,Medium Moving
+P0356,Electronics Item 356,Electronics,613,114,5.37719298245614,Medium Moving
+P0408,Electronics Item 408,Electronics,645,120,5.375,Medium Moving
+P0364,Grocery Item 364,Grocery,661,123,5.373983739837398,Medium Moving
+P0218,Grocery Item 218,Grocery,575,107,5.373831775700935,Medium Moving
+P0141,Home & Kitchen Item 141,Home & Kitchen,607,113,5.371681415929204,Medium Moving
+P0350,Grocery Item 350,Grocery,612,114,5.368421052631579,Medium Moving
+P0237,Electronics Item 237,Electronics,589,110,5.3545454545454545,Medium Moving
+P0179,Grocery Item 179,Grocery,605,113,5.353982300884955,Medium Moving
+P0450,Electronics Item 450,Electronics,545,102,5.3431372549019605,Medium Moving
+P0040,Grocery Item 40,Grocery,577,108,5.342592592592593,Medium Moving
+P0300,Grocery Item 300,Grocery,577,108,5.342592592592593,Medium Moving
+P0258,Electronics Item 258,Electronics,614,115,5.339130434782609,Medium Moving
+P0025,Personal Care Item 25,Personal Care,630,118,5.338983050847458,Medium Moving
+P0001,Grocery Item 1,Grocery,683,128,5.3359375,Medium Moving
+P0079,Apparel Item 79,Apparel,560,105,5.333333333333333,Medium Moving
+P0465,Electronics Item 465,Electronics,613,115,5.3304347826086955,Medium Moving
+P0366,Electronics Item 366,Electronics,613,115,5.3304347826086955,Medium Moving
+P0093,Grocery Item 93,Grocery,613,115,5.3304347826086955,Medium Moving
+P0016,Grocery Item 16,Grocery,597,112,5.330357142857143,Medium Moving
+P0046,Electronics Item 46,Electronics,565,106,5.330188679245283,Medium Moving
+P0311,Home & Kitchen Item 311,Home & Kitchen,607,114,5.324561403508772,Medium Moving
+P0167,Electronics Item 167,Electronics,543,102,5.323529411764706,Medium Moving
+P0127,Apparel Item 127,Apparel,644,121,5.322314049586777,Medium Moving
+P0247,Personal Care Item 247,Personal Care,612,115,5.321739130434783,Medium Moving
+P0241,Apparel Item 241,Apparel,670,126,5.317460317460317,Medium Moving
+P0201,Electronics Item 201,Electronics,606,114,5.315789473684211,Medium Moving
+P0495,Personal Care Item 495,Personal Care,590,111,5.315315315315315,Medium Moving
+P0072,Grocery Item 72,Grocery,627,118,5.313559322033898,Medium Moving
+P0344,Electronics Item 344,Electronics,595,112,5.3125,Medium Moving
+P0056,Electronics Item 56,Electronics,579,109,5.3119266055045875,Medium Moving
+P0297,Grocery Item 297,Grocery,621,117,5.3076923076923075,Medium Moving
+P0477,Electronics Item 477,Electronics,674,127,5.307086614173229,Medium Moving
+P0234,Grocery Item 234,Grocery,642,121,5.305785123966942,Medium Moving
+P0259,Electronics Item 259,Electronics,610,115,5.304347826086956,Medium Moving
+P0492,Personal Care Item 492,Personal Care,594,112,5.303571428571429,Medium Moving
+P0307,Electronics Item 307,Electronics,631,119,5.302521008403361,Medium Moving
+P0313,Home & Kitchen Item 313,Home & Kitchen,631,119,5.302521008403361,Medium Moving
+P0380,Home & Kitchen Item 380,Home & Kitchen,652,123,5.300813008130081,Medium Moving
+P0330,Electronics Item 330,Electronics,689,130,5.3,Medium Moving
+P0177,Grocery Item 177,Grocery,636,120,5.3,Medium Moving
+P0041,Electronics Item 41,Electronics,535,101,5.297029702970297,Medium Moving
+P0100,Apparel Item 100,Apparel,630,119,5.294117647058823,Medium Moving
+P0333,Electronics Item 333,Electronics,672,127,5.291338582677166,Medium Moving
+P0087,Personal Care Item 87,Personal Care,603,114,5.2894736842105265,Medium Moving
+P0171,Personal Care Item 171,Personal Care,624,118,5.288135593220339,Medium Moving
+P0017,Grocery Item 17,Grocery,661,125,5.288,Medium Moving
+P0427,Apparel Item 427,Apparel,608,115,5.28695652173913,Medium Moving
+P0203,Apparel Item 203,Apparel,581,110,5.281818181818182,Medium Moving
+P0236,Home & Kitchen Item 236,Home & Kitchen,607,115,5.278260869565218,Medium Moving
+P0094,Personal Care Item 94,Personal Care,612,116,5.275862068965517,Medium Moving
+P0359,Apparel Item 359,Apparel,633,120,5.275,Medium Moving
+P0276,Electronics Item 276,Electronics,617,117,5.273504273504273,Medium Moving
+P0327,Apparel Item 327,Apparel,638,121,5.2727272727272725,Medium Moving
+P0435,Home & Kitchen Item 435,Home & Kitchen,622,118,5.271186440677966,Medium Moving
+P0005,Apparel Item 5,Apparel,622,118,5.271186440677966,Medium Moving
+P0312,Electronics Item 312,Electronics,648,123,5.2682926829268295,Medium Moving
+P0409,Electronics Item 409,Electronics,648,123,5.2682926829268295,Medium Moving
+P0474,Personal Care Item 474,Personal Care,590,112,5.267857142857143,Medium Moving
+P0108,Electronics Item 108,Electronics,690,131,5.267175572519084,Medium Moving
+P0273,Grocery Item 273,Grocery,674,128,5.265625,Medium Moving
+P0291,Electronics Item 291,Electronics,616,117,5.264957264957265,Medium Moving
+P0272,Personal Care Item 272,Personal Care,537,102,5.264705882352941,Medium Moving
+P0022,Personal Care Item 22,Personal Care,584,111,5.261261261261262,Medium Moving
+P0293,Home & Kitchen Item 293,Home & Kitchen,626,119,5.260504201680672,Medium Moving
+P0126,Home & Kitchen Item 126,Home & Kitchen,652,124,5.258064516129032,Medium Moving
+P0418,Apparel Item 418,Apparel,552,105,5.257142857142857,Medium Moving
+P0002,Home & Kitchen Item 2,Home & Kitchen,573,109,5.256880733944954,Medium Moving
+P0310,Electronics Item 310,Electronics,662,126,5.253968253968254,Medium Moving
+P0213,Grocery Item 213,Grocery,583,111,5.252252252252252,Medium Moving
+P0119,Apparel Item 119,Apparel,646,123,5.252032520325203,Medium Moving
+P0283,Grocery Item 283,Grocery,693,132,5.25,Medium Moving
+P0024,Home & Kitchen Item 24,Home & Kitchen,650,124,5.241935483870968,Medium Moving
+P0129,Personal Care Item 129,Personal Care,524,100,5.24,Medium Moving
+P0305,Home & Kitchen Item 305,Home & Kitchen,613,117,5.239316239316239,Medium Moving
+P0202,Personal Care Item 202,Personal Care,592,113,5.238938053097345,Medium Moving
+P0027,Personal Care Item 27,Personal Care,597,114,5.2368421052631575,Medium Moving
+P0187,Personal Care Item 187,Personal Care,628,120,5.233333333333333,Medium Moving
+P0158,Apparel Item 158,Apparel,596,114,5.228070175438597,Medium Moving
+P0217,Personal Care Item 217,Personal Care,606,116,5.224137931034483,Medium Moving
+P0066,Electronics Item 66,Electronics,637,122,5.221311475409836,Medium Moving
+P0437,Grocery Item 437,Grocery,590,113,5.221238938053097,Medium Moving
+P0382,Personal Care Item 382,Personal Care,590,113,5.221238938053097,Medium Moving
+P0054,Grocery Item 54,Grocery,590,113,5.221238938053097,Medium Moving
+P0470,Electronics Item 470,Electronics,595,114,5.219298245614035,Medium Moving
+P0147,Apparel Item 147,Apparel,595,114,5.219298245614035,Medium Moving
+P0308,Apparel Item 308,Apparel,605,116,5.2155172413793105,Medium Moving
+P0484,Electronics Item 484,Electronics,589,113,5.212389380530974,Medium Moving
+P0491,Apparel Item 491,Apparel,645,124,5.201612903225806,Medium Moving
+P0496,Personal Care Item 496,Personal Care,624,120,5.2,Medium Moving
+P0099,Grocery Item 99,Grocery,608,117,5.196581196581197,Medium Moving
+P0396,Apparel Item 396,Apparel,665,128,5.1953125,Medium Moving
+P0287,Electronics Item 287,Electronics,633,122,5.188524590163935,Medium Moving
+P0045,Personal Care Item 45,Personal Care,581,112,5.1875,Medium Moving
+P0232,Home & Kitchen Item 232,Home & Kitchen,581,112,5.1875,Medium Moving
+P0422,Home & Kitchen Item 422,Home & Kitchen,534,103,5.184466019417476,Medium Moving
+P0436,Home & Kitchen Item 436,Home & Kitchen,622,120,5.183333333333334,Medium Moving
+P0406,Electronics Item 406,Electronics,596,115,5.182608695652174,Medium Moving
+P0377,Grocery Item 377,Grocery,627,121,5.181818181818182,Medium Moving
+P0221,Apparel Item 221,Apparel,570,110,5.181818181818182,Medium Moving
+P0410,Home & Kitchen Item 410,Home & Kitchen,616,119,5.176470588235294,Medium Moving
+P0277,Home & Kitchen Item 277,Home & Kitchen,626,121,5.1735537190082646,Medium Moving
+P0430,Grocery Item 430,Grocery,600,116,5.172413793103448,Medium Moving
+P0230,Home & Kitchen Item 230,Home & Kitchen,605,117,5.170940170940171,Medium Moving
+P0482,Electronics Item 482,Electronics,605,117,5.170940170940171,Medium Moving
+P0255,Grocery Item 255,Grocery,553,107,5.168224299065421,Medium Moving
+P0188,Electronics Item 188,Electronics,584,113,5.168141592920354,Medium Moving
+P0424,Home & Kitchen Item 424,Home & Kitchen,537,104,5.163461538461538,Medium Moving
+P0042,Grocery Item 42,Grocery,547,106,5.160377358490566,Medium Moving
+P0279,Electronics Item 279,Electronics,562,109,5.155963302752293,Medium Moving
+P0192,Grocery Item 192,Grocery,608,118,5.1525423728813555,Medium Moving
+P0400,Electronics Item 400,Electronics,608,118,5.1525423728813555,Medium Moving
+P0317,Grocery Item 317,Grocery,644,125,5.152,Medium Moving
+P0242,Grocery Item 242,Grocery,577,112,5.151785714285714,Medium Moving
+P0245,Personal Care Item 245,Personal Care,618,120,5.15,Medium Moving
+P0385,Electronics Item 385,Electronics,551,107,5.149532710280374,Medium Moving
+P0461,Electronics Item 461,Electronics,556,108,5.148148148148148,Medium Moving
+P0140,Apparel Item 140,Apparel,525,102,5.147058823529412,Medium Moving
+P0191,Apparel Item 191,Apparel,561,109,5.146788990825688,Medium Moving
+P0419,Home & Kitchen Item 419,Home & Kitchen,597,116,5.146551724137931,Medium Moving
+P0332,Apparel Item 332,Apparel,633,123,5.146341463414634,Medium Moving
+P0185,Electronics Item 185,Electronics,607,118,5.1440677966101696,Medium Moving
+P0078,Apparel Item 78,Apparel,612,119,5.142857142857143,Medium Moving
+P0170,Apparel Item 170,Apparel,575,112,5.133928571428571,Medium Moving
+P0319,Grocery Item 319,Grocery,590,115,5.130434782608695,Medium Moving
+P0076,Apparel Item 76,Apparel,595,116,5.129310344827586,Medium Moving
+P0145,Electronics Item 145,Electronics,636,124,5.129032258064516,Medium Moving
+P0348,Personal Care Item 348,Personal Care,559,109,5.128440366972477,Medium Moving
+P0009,Personal Care Item 9,Personal Care,600,117,5.128205128205129,Medium Moving
+P0233,Electronics Item 233,Electronics,600,117,5.128205128205129,Medium Moving
+P0494,Home & Kitchen Item 494,Home & Kitchen,564,110,5.127272727272727,Medium Moving
+P0323,Personal Care Item 323,Personal Care,569,111,5.126126126126126,Medium Moving
+P0069,Electronics Item 69,Electronics,615,120,5.125,Medium Moving
+P0252,Grocery Item 252,Grocery,574,112,5.125,Medium Moving
+P0207,Apparel Item 207,Apparel,620,121,5.12396694214876,Medium Moving
+P0055,Personal Care Item 55,Personal Care,579,113,5.123893805309734,Medium Moving
+P0206,Electronics Item 206,Electronics,579,113,5.123893805309734,Medium Moving
+P0036,Home & Kitchen Item 36,Home & Kitchen,625,122,5.122950819672131,Medium Moving
+P0225,Home & Kitchen Item 225,Home & Kitchen,594,116,5.120689655172414,Medium Moving
+P0156,Electronics Item 156,Electronics,604,118,5.11864406779661,Medium Moving
+P0395,Grocery Item 395,Grocery,563,110,5.118181818181818,Medium Moving
+P0318,Apparel Item 318,Apparel,609,119,5.117647058823529,Medium Moving
+P0044,Apparel Item 44,Apparel,619,121,5.115702479338843,Medium Moving
+P0136,Electronics Item 136,Electronics,567,111,5.108108108108108,Medium Moving
+P0048,Grocery Item 48,Grocery,592,116,5.103448275862069,Medium Moving
+P0413,Personal Care Item 413,Personal Care,546,107,5.102803738317757,Medium Moving
+P0113,Apparel Item 113,Apparel,546,107,5.102803738317757,Medium Moving
+P0383,Apparel Item 383,Apparel,602,118,5.101694915254237,Medium Moving
+P0183,Personal Care Item 183,Personal Care,658,129,5.10077519379845,Medium Moving
+P0117,Home & Kitchen Item 117,Home & Kitchen,576,113,5.097345132743363,Medium Moving
+P0133,Grocery Item 133,Grocery,586,115,5.095652173913043,Medium Moving
+P0060,Grocery Item 60,Grocery,596,117,5.094017094017094,Medium Moving
+P0051,Personal Care Item 51,Personal Care,677,133,5.090225563909774,Medium Moving
+P0388,Grocery Item 388,Grocery,585,115,5.086956521739131,Medium Moving
+P0282,Personal Care Item 282,Personal Care,590,116,5.086206896551724,Medium Moving
+P0476,Home & Kitchen Item 476,Home & Kitchen,651,128,5.0859375,Medium Moving
+P0021,Personal Care Item 21,Personal Care,605,119,5.084033613445378,Medium Moving
+P0257,Electronics Item 257,Electronics,610,120,5.083333333333333,Medium Moving
+P0341,Electronics Item 341,Electronics,625,123,5.08130081300813,Medium Moving
+P0463,Grocery Item 463,Grocery,579,114,5.078947368421052,Medium Moving
+P0411,Home & Kitchen Item 411,Home & Kitchen,533,105,5.076190476190476,Medium Moving
+P0271,Grocery Item 271,Grocery,604,119,5.07563025210084,Medium Moving
+P0229,Grocery Item 229,Grocery,619,122,5.073770491803279,Medium Moving
+P0248,Personal Care Item 248,Personal Care,563,111,5.072072072072072,Medium Moving
+P0369,Personal Care Item 369,Personal Care,634,125,5.072,Medium Moving
+P0033,Apparel Item 33,Apparel,568,112,5.071428571428571,Medium Moving
+P0394,Personal Care Item 394,Personal Care,588,116,5.068965517241379,Medium Moving
+P0361,Grocery Item 361,Grocery,628,124,5.064516129032258,Medium Moving
+P0111,Electronics Item 111,Electronics,592,117,5.05982905982906,Medium Moving
+P0082,Personal Care Item 82,Personal Care,597,118,5.059322033898305,Medium Moving
+P0325,Personal Care Item 325,Personal Care,597,118,5.059322033898305,Medium Moving
+P0052,Personal Care Item 52,Personal Care,602,119,5.0588235294117645,Medium Moving
+P0125,Grocery Item 125,Grocery,556,110,5.054545454545455,Medium Moving
+P0197,Personal Care Item 197,Personal Care,581,115,5.052173913043478,Medium Moving
+P0362,Apparel Item 362,Apparel,606,120,5.05,Medium Moving
+P0324,Home & Kitchen Item 324,Home & Kitchen,606,120,5.05,Medium Moving
+P0466,Electronics Item 466,Electronics,616,122,5.049180327868853,Medium Moving
+P0415,Apparel Item 415,Apparel,550,109,5.045871559633028,Medium Moving
+P0263,Electronics Item 263,Electronics,555,110,5.045454545454546,Medium Moving
+P0351,Apparel Item 351,Apparel,570,113,5.04424778761062,Medium Moving
+P0102,Apparel Item 102,Apparel,570,113,5.04424778761062,Medium Moving
+P0346,Home & Kitchen Item 346,Home & Kitchen,590,117,5.042735042735043,Medium Moving
+P0455,Electronics Item 455,Electronics,595,118,5.0423728813559325,Medium Moving
+P0029,Grocery Item 29,Grocery,595,118,5.0423728813559325,Medium Moving
+P0374,Home & Kitchen Item 374,Home & Kitchen,600,119,5.042016806722689,Medium Moving
+P0131,Electronics Item 131,Electronics,600,119,5.042016806722689,Medium Moving
+P0034,Home & Kitchen Item 34,Home & Kitchen,610,121,5.041322314049586,Medium Moving
+P0331,Grocery Item 331,Grocery,625,124,5.040322580645161,Medium Moving
+P0228,Apparel Item 228,Apparel,584,116,5.0344827586206895,Medium Moving
+P0289,Electronics Item 289,Electronics,584,116,5.0344827586206895,Medium Moving
+P0399,Grocery Item 399,Grocery,584,116,5.0344827586206895,Medium Moving
+P0019,Home & Kitchen Item 19,Home & Kitchen,594,118,5.033898305084746,Medium Moving
+P0270,Personal Care Item 270,Personal Care,594,118,5.033898305084746,Medium Moving
+P0378,Grocery Item 378,Grocery,513,102,5.029411764705882,Medium Moving
+P0106,Home & Kitchen Item 106,Home & Kitchen,558,111,5.027027027027027,Medium Moving
+P0124,Home & Kitchen Item 124,Home & Kitchen,583,116,5.025862068965517,Medium Moving
+P0379,Electronics Item 379,Electronics,588,117,5.0256410256410255,Medium Moving
+P0189,Personal Care Item 189,Personal Care,608,121,5.024793388429752,Medium Moving
+P0196,Grocery Item 196,Grocery,623,124,5.024193548387097,Medium Moving
+P0302,Personal Care Item 302,Personal Care,552,110,5.0181818181818185,Medium Moving
+P0416,Apparel Item 416,Apparel,572,114,5.017543859649122,Medium Moving
+P0386,Home & Kitchen Item 386,Home & Kitchen,577,115,5.017391304347826,Medium Moving
+P0142,Grocery Item 142,Grocery,602,120,5.016666666666667,Medium Moving
+P0151,Grocery Item 151,Grocery,561,112,5.008928571428571,Medium Moving
+P0417,Home & Kitchen Item 417,Home & Kitchen,571,114,5.008771929824562,Medium Moving
+P0360,Personal Care Item 360,Personal Care,571,114,5.008771929824562,Medium Moving
+P0321,Grocery Item 321,Grocery,576,115,5.008695652173913,Medium Moving
+P0107,Apparel Item 107,Apparel,591,118,5.008474576271187,Medium Moving
+P0032,Electronics Item 32,Electronics,626,125,5.008,Medium Moving
+P0143,Home & Kitchen Item 143,Home & Kitchen,605,121,5.0,Medium Moving
+P0481,Personal Care Item 481,Personal Care,570,114,5.0,Medium Moving
+P0391,Apparel Item 391,Apparel,540,108,5.0,Medium Moving
+P0083,Personal Care Item 83,Personal Care,580,116,5.0,Medium Moving
+P0105,Electronics Item 105,Electronics,605,121,5.0,Medium Moving
+P0121,Grocery Item 121,Grocery,615,123,5.0,Medium Moving
+P0137,Home & Kitchen Item 137,Home & Kitchen,630,126,5.0,Medium Moving
+P0497,Grocery Item 497,Grocery,624,125,4.992,Medium Moving
+P0468,Personal Care Item 468,Personal Care,614,123,4.991869918699187,Medium Moving
+P0249,Home & Kitchen Item 249,Home & Kitchen,584,117,4.9914529914529915,Medium Moving
+P0265,Apparel Item 265,Apparel,584,117,4.9914529914529915,Medium Moving
+P0150,Grocery Item 150,Grocery,544,109,4.990825688073395,Medium Moving
+P0286,Electronics Item 286,Electronics,598,120,4.983333333333333,Medium Moving
+P0425,Home & Kitchen Item 425,Home & Kitchen,558,112,4.982142857142857,Medium Moving
+P0371,Grocery Item 371,Grocery,607,122,4.975409836065574,Medium Moving
+P0453,Personal Care Item 453,Personal Care,587,118,4.97457627118644,Medium Moving
+P0000,Grocery Item 0,Grocery,557,112,4.973214285714286,Medium Moving
+P0059,Personal Care Item 59,Personal Care,547,110,4.972727272727273,Medium Moving
+P0166,Apparel Item 166,Apparel,547,110,4.972727272727273,Medium Moving
+P0478,Electronics Item 478,Electronics,537,108,4.972222222222222,Medium Moving
+P0354,Apparel Item 354,Apparel,601,121,4.966942148760331,Medium Moving
+P0299,Grocery Item 299,Grocery,596,120,4.966666666666667,Medium Moving
+P0068,Electronics Item 68,Electronics,591,119,4.966386554621849,Medium Moving
+P0428,Electronics Item 428,Electronics,591,119,4.966386554621849,Medium Moving
+P0075,Grocery Item 75,Grocery,586,118,4.966101694915254,Medium Moving
+P0433,Personal Care Item 433,Personal Care,581,117,4.965811965811966,Medium Moving
+P0199,Grocery Item 199,Grocery,571,115,4.965217391304348,Medium Moving
+P0426,Electronics Item 426,Electronics,551,111,4.963963963963964,Medium Moving
+P0459,Personal Care Item 459,Personal Care,546,110,4.963636363636364,Medium Moving
+P0173,Electronics Item 173,Electronics,531,107,4.962616822429907,Medium Moving
+P0473,Home & Kitchen Item 473,Home & Kitchen,511,103,4.961165048543689,Medium Moving
+P0274,Grocery Item 274,Grocery,496,100,4.96,Medium Moving
+P0122,Apparel Item 122,Apparel,605,122,4.959016393442623,Medium Moving
+P0195,Home & Kitchen Item 195,Home & Kitchen,580,117,4.957264957264957,Medium Moving
+P0292,Home & Kitchen Item 292,Home & Kitchen,575,116,4.956896551724138,Medium Moving
+P0112,Electronics Item 112,Electronics,565,114,4.956140350877193,Medium Moving
+P0227,Electronics Item 227,Electronics,565,114,4.956140350877193,Medium Moving
+P0096,Personal Care Item 96,Personal Care,560,113,4.95575221238938,Medium Moving
+P0444,Grocery Item 444,Grocery,609,123,4.951219512195122,Medium Moving
+P0104,Apparel Item 104,Apparel,609,123,4.951219512195122,Medium Moving
+P0266,Apparel Item 266,Apparel,604,122,4.950819672131147,Medium Moving
+P0012,Electronics Item 12,Electronics,589,119,4.949579831932773,Medium Moving
+P0026,Grocery Item 26,Grocery,579,117,4.948717948717949,Medium Moving
+P0392,Grocery Item 392,Grocery,569,115,4.947826086956522,Medium Moving
+P0485,Apparel Item 485,Apparel,549,111,4.945945945945946,Medium Moving
+P0389,Personal Care Item 389,Personal Care,519,105,4.942857142857143,Medium Moving
+P0064,Grocery Item 64,Grocery,593,120,4.941666666666666,Medium Moving
+P0405,Personal Care Item 405,Personal Care,573,116,4.939655172413793,Medium Moving
+P0349,Electronics Item 349,Electronics,568,115,4.939130434782609,Medium Moving
+P0154,Home & Kitchen Item 154,Home & Kitchen,538,109,4.935779816513762,Medium Moving
+P0182,Electronics Item 182,Electronics,592,120,4.933333333333334,Medium Moving
+P0403,Grocery Item 403,Grocery,587,119,4.932773109243698,Medium Moving
+P0285,Grocery Item 285,Grocery,587,119,4.932773109243698,Medium Moving
+P0080,Apparel Item 80,Apparel,567,115,4.930434782608696,Medium Moving
+P0334,Electronics Item 334,Electronics,567,115,4.930434782608696,Medium Moving
+P0442,Apparel Item 442,Apparel,517,105,4.923809523809524,Medium Moving
+P0071,Personal Care Item 71,Personal Care,630,128,4.921875,Medium Moving
+P0135,Home & Kitchen Item 135,Home & Kitchen,566,115,4.921739130434783,Medium Moving
+P0475,Electronics Item 475,Electronics,620,126,4.920634920634921,Medium Moving
+P0222,Apparel Item 222,Apparel,620,126,4.920634920634921,Medium Moving
+P0337,Apparel Item 337,Apparel,600,122,4.918032786885246,Medium Moving
+P0244,Personal Care Item 244,Personal Care,600,122,4.918032786885246,Medium Moving
+P0353,Apparel Item 353,Apparel,585,119,4.915966386554622,Medium Moving
+P0205,Personal Care Item 205,Personal Care,550,112,4.910714285714286,Medium Moving
+P0326,Apparel Item 326,Apparel,599,122,4.909836065573771,Medium Moving
+P0175,Apparel Item 175,Apparel,589,120,4.908333333333333,Medium Moving
+P0198,Apparel Item 198,Apparel,584,119,4.907563025210084,Medium Moving
+P0130,Apparel Item 130,Apparel,569,116,4.905172413793103,Medium Moving
+P0120,Apparel Item 120,Apparel,564,115,4.904347826086957,Medium Moving
+P0412,Personal Care Item 412,Personal Care,554,113,4.902654867256637,Medium Moving
+P0329,Grocery Item 329,Grocery,603,123,4.902439024390244,Medium Moving
+P0487,Grocery Item 487,Grocery,598,122,4.901639344262295,Medium Moving
+P0298,Electronics Item 298,Electronics,617,126,4.896825396825397,Medium Moving
+P0457,Apparel Item 457,Apparel,558,114,4.894736842105263,Medium Moving
+P0434,Electronics Item 434,Electronics,562,115,4.886956521739131,Medium Moving
+P0253,Apparel Item 253,Apparel,586,120,4.883333333333334,Medium Moving
+P0067,Personal Care Item 67,Personal Care,542,111,4.882882882882883,Medium Moving
+P0008,Apparel Item 8,Apparel,566,116,4.879310344827586,Medium Moving
+P0340,Personal Care Item 340,Personal Care,600,123,4.878048780487805,Medium Moving
+P0281,Electronics Item 281,Electronics,556,114,4.87719298245614,Medium Moving
+P0097,Electronics Item 97,Electronics,634,130,4.876923076923077,Medium Moving
+P0373,Home & Kitchen Item 373,Home & Kitchen,550,113,4.867256637168142,Medium Moving
+P0214,Grocery Item 214,Grocery,545,112,4.866071428571429,Medium Moving
+P0267,Personal Care Item 267,Personal Care,579,119,4.8655462184873945,Medium Moving
+P0336,Home & Kitchen Item 336,Home & Kitchen,564,116,4.862068965517241,Medium Moving
+P0103,Electronics Item 103,Electronics,525,108,4.861111111111111,Medium Moving
+P0146,Home & Kitchen Item 146,Home & Kitchen,554,114,4.859649122807017,Medium Moving
+P0401,Apparel Item 401,Apparel,583,120,4.858333333333333,Medium Moving
+P0250,Apparel Item 250,Apparel,495,102,4.852941176470588,Medium Moving
+P0423,Home & Kitchen Item 423,Home & Kitchen,558,115,4.852173913043479,Medium Moving
+P0186,Home & Kitchen Item 186,Home & Kitchen,558,115,4.852173913043479,Medium Moving
+P0164,Personal Care Item 164,Personal Care,533,110,4.845454545454546,Medium Moving
+P0038,Electronics Item 38,Electronics,576,119,4.840336134453781,Medium Moving
+P0264,Apparel Item 264,Apparel,576,119,4.840336134453781,Medium Moving
+P0014,Electronics Item 14,Electronics,556,115,4.834782608695652,Medium Moving
+P0084,Home & Kitchen Item 84,Home & Kitchen,580,120,4.833333333333333,Medium Moving
+P0243,Personal Care Item 243,Personal Care,512,106,4.830188679245283,Medium Moving
+P0180,Apparel Item 180,Apparel,584,121,4.8264462809917354,Medium Moving
+P0328,Personal Care Item 328,Personal Care,579,120,4.825,Medium Moving
+P0456,Apparel Item 456,Apparel,569,118,4.822033898305085,Medium Moving
+P0065,Electronics Item 65,Electronics,549,114,4.815789473684211,Medium Moving
+P0240,Electronics Item 240,Electronics,549,114,4.815789473684211,Medium Moving
+P0050,Electronics Item 50,Electronics,533,111,4.801801801801802,Medium Moving
+P0414,Apparel Item 414,Apparel,528,110,4.8,Medium Moving
+P0367,Home & Kitchen Item 367,Home & Kitchen,528,110,4.8,Medium Moving
+P0049,Grocery Item 49,Grocery,571,119,4.798319327731092,Medium Moving
+P0204,Home & Kitchen Item 204,Home & Kitchen,518,108,4.796296296296297,Medium Moving
+P0086,Home & Kitchen Item 86,Home & Kitchen,633,132,4.795454545454546,Medium Moving
+P0123,Home & Kitchen Item 123,Home & Kitchen,585,122,4.795081967213115,Medium Moving
+P0275,Apparel Item 275,Apparel,513,107,4.794392523364486,Medium Moving
+P0320,Grocery Item 320,Grocery,546,114,4.7894736842105265,Medium Moving
+P0375,Home & Kitchen Item 375,Home & Kitchen,613,128,4.7890625,Medium Moving
+P0031,Electronics Item 31,Electronics,555,116,4.7844827586206895,Medium Moving
+P0020,Apparel Item 20,Apparel,598,125,4.784,Medium Moving
+P0039,Grocery Item 39,Grocery,531,111,4.783783783783784,Medium Moving
+P0384,Apparel Item 384,Apparel,507,106,4.783018867924528,Medium Moving
+P0004,Home & Kitchen Item 4,Home & Kitchen,569,119,4.781512605042017,Medium Moving
+P0181,Personal Care Item 181,Personal Care,569,119,4.781512605042017,Medium Moving
+P0469,Electronics Item 469,Electronics,540,113,4.778761061946903,Medium Moving
+P0098,Home & Kitchen Item 98,Home & Kitchen,540,113,4.778761061946903,Medium Moving
+P0358,Apparel Item 358,Apparel,554,116,4.775862068965517,Medium Moving
+P0499,Apparel Item 499,Apparel,582,122,4.770491803278689,Medium Moving
+P0209,Electronics Item 209,Electronics,539,113,4.769911504424779,Medium Moving
+P0193,Electronics Item 193,Electronics,639,134,4.768656716417911,Medium Moving
+P0462,Home & Kitchen Item 462,Home & Kitchen,529,111,4.7657657657657655,Medium Moving
+P0431,Home & Kitchen Item 431,Home & Kitchen,548,115,4.765217391304348,Medium Moving
+P0155,Electronics Item 155,Electronics,567,119,4.764705882352941,Medium Moving
+P0168,Home & Kitchen Item 168,Home & Kitchen,567,119,4.764705882352941,Medium Moving
+P0486,Apparel Item 486,Apparel,557,117,4.760683760683761,Medium Moving
+P0443,Grocery Item 443,Grocery,557,117,4.760683760683761,Medium Moving
+P0162,Grocery Item 162,Grocery,571,120,4.758333333333334,Medium Moving
+P0047,Electronics Item 47,Electronics,566,119,4.756302521008403,Medium Moving
+P0387,Home & Kitchen Item 387,Home & Kitchen,542,114,4.754385964912281,Medium Moving
+P0062,Grocery Item 62,Grocery,593,125,4.744,Medium Moving
+P0376,Grocery Item 376,Grocery,574,121,4.743801652892562,Medium Moving
+P0460,Personal Care Item 460,Personal Care,498,105,4.742857142857143,Medium Moving
+P0015,Grocery Item 15,Grocery,520,110,4.7272727272727275,Medium Moving
+P0368,Grocery Item 368,Grocery,500,106,4.716981132075472,Medium Moving
+P0338,Personal Care Item 338,Personal Care,580,123,4.715447154471545,Medium Moving
+P0172,Personal Care Item 172,Personal Care,580,123,4.715447154471545,Medium Moving
+P0223,Apparel Item 223,Apparel,580,123,4.715447154471545,Medium Moving
+P0153,Personal Care Item 153,Personal Care,537,114,4.7105263157894735,Medium Moving
+P0010,Home & Kitchen Item 10,Home & Kitchen,537,114,4.7105263157894735,Medium Moving
+P0053,Apparel Item 53,Apparel,565,120,4.708333333333333,Medium Moving
+P0085,Apparel Item 85,Apparel,499,106,4.7075471698113205,Medium Moving
+P0101,Personal Care Item 101,Personal Care,560,119,4.705882352941177,Medium Moving
+P0043,Apparel Item 43,Apparel,526,112,4.696428571428571,Medium Moving
+P0139,Apparel Item 139,Apparel,587,125,4.696,Medium Moving
+P0238,Apparel Item 238,Apparel,502,107,4.691588785046729,Medium Moving
+P0290,Apparel Item 290,Apparel,530,113,4.6902654867256635,Medium Moving
+P0174,Home & Kitchen Item 174,Home & Kitchen,530,113,4.6902654867256635,Medium Moving
+P0397,Personal Care Item 397,Personal Care,544,116,4.689655172413793,Medium Moving
+P0006,Personal Care Item 6,Personal Care,538,115,4.678260869565217,Medium Moving
+P0239,Apparel Item 239,Apparel,556,119,4.6722689075630255,Medium Moving
+P0372,Grocery Item 372,Grocery,546,117,4.666666666666667,Medium Moving
+P0190,Apparel Item 190,Apparel,564,121,4.661157024793388,Medium Moving
+P0200,Apparel Item 200,Apparel,536,115,4.660869565217391,Medium Moving
+P0464,Home & Kitchen Item 464,Home & Kitchen,545,117,4.6581196581196584,Medium Moving
+P0235,Personal Care Item 235,Personal Care,600,129,4.651162790697675,Medium Moving
+P0398,Grocery Item 398,Grocery,511,110,4.6454545454545455,Medium Moving
+P0301,Apparel Item 301,Apparel,571,123,4.642276422764228,Medium Moving
+P0226,Personal Care Item 226,Personal Care,538,116,4.637931034482759,Medium Moving
+P0254,Apparel Item 254,Apparel,524,113,4.6371681415929205,Medium Moving
+P0157,Grocery Item 157,Grocery,565,122,4.631147540983607,Medium Moving
+P0472,Home & Kitchen Item 472,Home & Kitchen,565,122,4.631147540983607,Medium Moving
+P0445,Electronics Item 445,Electronics,523,113,4.628318584070796,Medium Moving
+P0284,Apparel Item 284,Apparel,546,118,4.627118644067797,Medium Moving
+P0077,Electronics Item 77,Electronics,555,120,4.625,Medium Moving
+P0280,Apparel Item 280,Apparel,531,115,4.6173913043478265,Medium Moving
+P0438,Grocery Item 438,Grocery,489,106,4.613207547169812,Medium Moving
+P0303,Personal Care Item 303,Personal Care,512,111,4.612612612612613,Medium Moving
+P0451,Grocery Item 451,Grocery,521,113,4.610619469026549,Medium Moving
+P0309,Personal Care Item 309,Personal Care,567,123,4.609756097560975,Medium Moving
+P0210,Personal Care Item 210,Personal Care,497,108,4.601851851851852,Medium Moving
+P0152,Electronics Item 152,Electronics,524,114,4.5964912280701755,Medium Moving
+P0306,Home & Kitchen Item 306,Home & Kitchen,556,121,4.595041322314049,Medium Moving
+P0447,Electronics Item 447,Electronics,542,118,4.593220338983051,Medium Moving
+P0090,Grocery Item 90,Grocery,537,117,4.589743589743589,Medium Moving
+P0296,Apparel Item 296,Apparel,514,112,4.589285714285714,Medium Moving
+P0381,Grocery Item 381,Grocery,541,118,4.584745762711864,Medium Moving
+P0498,Electronics Item 498,Electronics,526,115,4.573913043478261,Medium Moving
+P0116,Grocery Item 116,Grocery,544,119,4.571428571428571,Medium Moving
+P0439,Personal Care Item 439,Personal Care,525,115,4.565217391304348,Medium Moving
+P0402,Apparel Item 402,Apparel,520,114,4.56140350877193,Medium Moving
+P0335,Home & Kitchen Item 335,Home & Kitchen,529,116,4.560344827586207,Medium Moving
+P0483,Apparel Item 483,Apparel,538,119,4.5210084033613445,Medium Moving
+P0088,Home & Kitchen Item 88,Home & Kitchen,506,112,4.517857142857143,Medium Moving
+P0058,Grocery Item 58,Grocery,505,112,4.508928571428571,Medium Moving
+P0165,Electronics Item 165,Electronics,472,105,4.495238095238095,Medium Moving
+P0011,Grocery Item 11,Grocery,512,114,4.491228070175438,Medium Moving
+P0420,Electronics Item 420,Electronics,529,118,4.483050847457627,Medium Moving
+P0370,Apparel Item 370,Apparel,524,117,4.478632478632479,Medium Moving
+P0314,Electronics Item 314,Electronics,506,113,4.477876106194691,Medium Moving
+P0063,Home & Kitchen Item 63,Home & Kitchen,545,122,4.467213114754099,Medium Moving
+P0091,Home & Kitchen Item 91,Home & Kitchen,569,128,4.4453125,Medium Moving
+P0081,Electronics Item 81,Electronics,541,124,4.362903225806452,Medium Moving
+P0304,Personal Care Item 304,Personal Care,532,122,4.360655737704918,Medium Moving
+P0357,Grocery Item 357,Grocery,523,120,4.358333333333333,Medium Moving
+P0316,Electronics Item 316,Electronics,554,128,4.328125,Medium Moving
+P0023,Personal Care Item 23,Personal Care,489,114,4.2894736842105265,Medium Moving
