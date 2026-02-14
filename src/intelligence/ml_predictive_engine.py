@@ -1,18 +1,12 @@
-import duckdb
 from datetime import datetime
-
-DB_PATH = "data/warehouse/retail.duckdb"
 
 
 class MLPredictiveEngine:
 
-    def __init__(self):
-        self.con = duckdb.connect(DB_PATH)
-        print("ML Engine connected to warehouse.")
+    def __init__(self, connection):
+        self.con = connection
+        print("ML Engine attached to existing DB connection.")
 
-    # ==================================================
-    # STOCKOUT RISK USING REAL WAREHOUSE STRUCTURE
-    # ==================================================
     def predict_stockout_with_explanation(self, product_id, store_id):
 
         try:
@@ -42,9 +36,7 @@ class MLPredictiveEngine:
         product_key = int(df["product_key"][0])
         store_key = int(df["store_key"][0])
 
-        # =========================
         # Risk Logic
-        # =========================
         if stock <= reorder_point * 0.5:
             level = "Critical"
             confidence = 92.5
@@ -60,10 +52,6 @@ class MLPredictiveEngine:
 
         recommended_reorder = max(reorder_point * 2 - stock, 0)
 
-        # ==================================================
-        # Insert alerts only for High / Critical
-        # Prevent duplicate spam
-        # ==================================================
         if level in ["High", "Critical"]:
 
             existing = self.con.execute("""
@@ -76,7 +64,6 @@ class MLPredictiveEngine:
 
             if existing == 0:
 
-                # Insert into ml_alerts
                 self.con.execute("""
                     INSERT INTO ml_alerts
                     VALUES (?, ?, ?, ?, ?, ?)
@@ -89,13 +76,11 @@ class MLPredictiveEngine:
                     recommended_reorder
                 ])
 
-                # Generate reorder_id manually
                 next_id = self.con.execute("""
                     SELECT COALESCE(MAX(reorder_id), 0) + 1
                     FROM auto_reorders
                 """).fetchone()[0]
 
-                # Insert into auto_reorders (CORRECT SCHEMA)
                 self.con.execute("""
                     INSERT INTO auto_reorders
                     (reorder_id, timestamp, product_id, store_id, reorder_quantity, trigger_reason)
