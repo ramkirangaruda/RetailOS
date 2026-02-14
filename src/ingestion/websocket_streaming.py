@@ -145,7 +145,8 @@ class WebSocketOrderStream:
                             confidence = result["explanation"]["ml_confidence"]
                             reorder = result["recommended_reorder"]
 
-                            if risk in ["High", "Critical"]:
+                            if risk in ["Medium", "High", "Critical"]:
+
                                 print("\n🚨 ML ALERT")
                                 print(f"   Product: {product_id}")
                                 print(f"   Store: {store_id}")
