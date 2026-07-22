@@ -1,0 +1,36 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8000
+      UVICORN_WORKERS: ${UVICORN_WORKERS:-1}
+      WS_HOST: ${WS_HOST:-localhost}
+      WS_PORT: ${WS_PORT:-8765}
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    volumes:
+      # Persist DuckDB across container restarts
+      - duckdb_data:/app/data/warehouse
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    environment:
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      # NOTE: client bundle uses build-time NEXT_PUBLIC_API_URL
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      - backend
+
+volumes:
+  duckdb_data:
+    name: ${DUCKDB_VOLUME_NAME:-retailos_duckdb}

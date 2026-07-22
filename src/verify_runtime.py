@@ -34,10 +34,19 @@ def verify_schema_manager():
     try:
         from ingestion.adaptive_schema_manager import AdaptiveSchemaManager
         manager = AdaptiveSchemaManager()
+        manager.initialize_registry()
         
-        # Test detection
-        df = pd.DataFrame({'id': [1], 'name': ['test'], 'new_col': [1.5]})
-        changes, missing = manager.detect_schema_changes('test_table', df)
+        # Test detection against a known registered schema
+        df = pd.DataFrame({
+            'transaction_id': [1],
+            'product_id': [10],
+            'store_id': [1],
+            'timestamp': pd.to_datetime(['2024-01-01']),
+            'quantity': [2],
+            'price': [100.0],
+            'new_col': [1.5],
+        })
+        changes, missing = manager.detect_schema_changes('transactions', df)
         
         if len(changes) > 0:
             return True, f"Initialized and detected {len(changes)} changes"

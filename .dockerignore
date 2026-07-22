@@ -1,0 +1,33 @@
+# VCS
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+*.pkl
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+venv/
+.venv/
+
+# Node / Next
+**/node_modules/
+**/.next/
+
+# Local artifacts
+logs/
+models/
+*.log
+*.tmp
+*.swp
+
+# Local data (DuckDB is persisted via a Docker volume instead)
+data/raw/
+data/warehouse/
+warehouse/

@@ -5,13 +5,19 @@ from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingRegressor
 
 
-DB_PATH = "data/warehouse/retail.duckdb"
+try:
+    from src.config import DB_PATH as _CONFIG_DB_PATH
+    DB_PATH = str(_CONFIG_DB_PATH)
+except Exception:
+    DB_PATH = "data/warehouse/retail.duckdb"
 
 
 class MLPredictiveEngine:
 
     def __init__(self):
         self.con = duckdb.connect(DB_PATH)
+
+        self._ensure_runtime_tables()
 
         self.classifier = RandomForestClassifier(
             n_estimators=50,
@@ -23,6 +29,22 @@ class MLPredictiveEngine:
         )
 
         self._train_models()
+
+
+    def _ensure_runtime_tables(self) -> None:
+        # Used by Streamlit dashboards and verification scripts.
+        self.con.execute("""
+            CREATE TABLE IF NOT EXISTS ml_reasoning_log (
+                id BIGINT,
+                timestamp TIMESTAMP,
+                model_name VARCHAR,
+                product_id VARCHAR,
+                store_id VARCHAR,
+                prediction DOUBLE,
+                confidence DOUBLE,
+                explanation_json VARCHAR
+            )
+        """)
 
 
     # =========================
