@@ -89,39 +89,48 @@ class BatchPipelineScheduler:
         try:
             # Import with error handling to avoid crashes if modules are missing
             try:
-                from ingestion.batch_pipeline import BatchIngestionPipeline
+                from ingestion.batch_pipeline import (
+                    BatchIngestionPipeline,
+                    default_schema_registry,
+                    run_all as run_all_ingestion,
+                )
             except ImportError:
                 self.logger.error("Could not import BatchIngestionPipeline")
                 raise
-                
+
             try:
                 from transformation.data_cleaning import DataCleaner
             except ImportError:
                 self.logger.warning("DataCleaner not found - skipping cleaning step")
                 DataCleaner = None
-                
+
             try:
-                from storage.partitioning import partition_all
+                from storage.partitioning import partition_fact_sales as partition_all
             except ImportError:
                 self.logger.warning("Partitioning module not found - skipping")
                 partition_all = None
-                
+
             from ingestion.adaptive_schema_manager import AdaptiveSchemaManager
-            
-            # Stage 1: Ingest with adaptive schema
+
+            # Stage 1: Ingest all tables. AdaptiveSchemaManager tracks schema
+            # drift independently (schema_change_log/schema_approval_queue);
+            # it is not yet wired into BatchIngestionPipeline's per-table
+            # validation, so we just make sure its tables exist here.
             self.logger.info("Stage 1: Ingesting data...")
-            pipeline = BatchIngestionPipeline()
+            registry = default_schema_registry()
+            pipeline = BatchIngestionPipeline(registry)
             schema_manager = AdaptiveSchemaManager()
-            
-            ingest_results = pipeline.run_all(schema_manager=schema_manager)
+            schema_manager.initialize_registry()
+
+            ingest_results = run_all_ingestion(pipeline)
             rows_processed = ingest_results['total_rows']
             rows_quarantined = ingest_results['quarantined_rows']
-            
+
             # Stage 2: Clean data
             if DataCleaner:
                 self.logger.info("Stage 2: Cleaning data...")
                 cleaner = DataCleaner()
-                clean_results = cleaner.run_all()
+                clean_results = cleaner.run()
             else:
                 clean_results = {'duplicates_removed': 0, 'nulls_fixed': 0, 'anomalies_flagged': 0}
             
@@ -178,39 +187,24 @@ class BatchPipelineScheduler:
             return {'status': 'failed', 'run_id': run_id, 'error': str(e)}
     
     async def run_ml_retraining(self):
-        """Retrain ML models with latest data"""
+        """Retrain ML models with latest data.
+
+        MLPredictiveEngine trains its classifier/regressor automatically as
+        part of __init__ (see src/intelligence/ml_predictive_engine.py) -
+        there is no separate train_stockout_classifier()/
+        train_reorder_amount_regressor()/train_demand_forecaster() API (no
+        Prophet forecasting is implemented in this codebase either), so
+        "retraining" is simply constructing a fresh instance.
+        """
         self.logger.info("Starting ML model retraining...")
-        
+
         try:
             from intelligence.ml_predictive_engine import MLPredictiveEngine
-            
-            engine = MLPredictiveEngine()
-            
-            # Retrain classifier
-            accuracy, importance = engine.train_stockout_classifier()
-            self.logger.info(f"Stockout classifier retrained: {accuracy:.2%} accuracy")
-            
-            # Retrain regressor
-            score = engine.train_reorder_amount_regressor()
-            self.logger.info(f"Reorder regressor retrained: R² = {score:.2f}")
-            
-            # Retrain Prophet models for top products
-            top_combos = self.con.execute("""
-            SELECT product_id, store_id 
-            FROM fact_sales fs
-            JOIN dim_product dp ON fs.product_key = dp.product_key
-            JOIN dim_store ds ON fs.store_key = ds.store_key
-            WHERE fs.date_key >= (SELECT MAX(date_key) - 30 FROM fact_sales)
-            GROUP BY product_id, store_id
-            ORDER BY SUM(revenue) DESC
-            LIMIT 20
-            """).fetchdf()
-            
-            for _, row in top_combos.iterrows():
-                engine.train_demand_forecaster(row['product_id'], row['store_id'])
-            
+
+            MLPredictiveEngine()
+
             self.logger.info("✅ ML retraining completed")
-            
+
         except Exception as e:
             self.logger.error(f"❌ ML retraining failed: {str(e)}")
     

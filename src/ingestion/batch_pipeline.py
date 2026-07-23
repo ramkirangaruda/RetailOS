@@ -69,7 +69,7 @@ class BatchIngestionPipeline:
     # Public API
     # -----------------------------
 
-    def run_for_table(self, table_name: str, csv_filename: str) -> None:
+    def run_for_table(self, table_name: str, csv_filename: str) -> Dict[str, int]:
         """
         Run ingestion for a single logical table / csv file.
 
@@ -79,6 +79,11 @@ class BatchIngestionPipeline:
             Logical name used to look up schema.
         csv_filename : str
             File name under raw_dir, e.g. 'customers.csv'.
+
+        Returns
+        -------
+        dict with 'valid_rows' and 'quarantined_rows' counts (both 0 if the
+        file could not be read after retries).
         """
         logger.info("Starting ingestion for table=%s, file=%s", table_name, csv_filename)
         schema = self.schema_registry.get(table_name)
@@ -90,7 +95,7 @@ class BatchIngestionPipeline:
         df = self._read_with_retries(csv_path)
         if df is None:
             logger.error("Failed to read file after retries: %s", csv_path)
-            return
+            return {"valid_rows": 0, "quarantined_rows": 0}
 
         logger.info("Read CSV '%s' with %d rows and %d columns", csv_path, len(df), len(df.columns))
 
@@ -108,6 +113,8 @@ class BatchIngestionPipeline:
             len(valid_df),
             len(quarantine_df),
         )
+
+        return {"valid_rows": len(valid_df), "quarantined_rows": len(quarantine_df)}
 
     # -----------------------------
     # Internal helpers
@@ -236,6 +243,20 @@ class BatchIngestionPipeline:
         valid_df.to_parquet(out_path, index=False)
 
 
+# Single source of truth for which (table_name, csv_filename) pairs the
+# batch pipeline ingests. Reused by __main__ below and by batch_scheduler.py
+# so both stay in sync.
+TABLE_CSV_PAIRS: List[Tuple[str, str]] = [
+    ("customers", "customers.csv"),
+    ("products", "products.csv"),
+    ("stores", "stores.csv"),
+    ("inventory", "inventory.csv"),
+    ("transactions", "transactions.csv"),
+    ("shipments", "shipments.csv"),
+    ("web_clickstream", "web_clickstream.csv"),
+]
+
+
 def default_schema_registry() -> SchemaRegistry:
     """
     Convenience factory for common retail schemas based on the existing CSVs.
@@ -244,29 +265,27 @@ def default_schema_registry() -> SchemaRegistry:
     """
     # Note: we do not know the exact column layouts from here, so treat all as optional.
     # You should revise these lists based on your actual CSV headers.
-    schemas = [
-        TableSchema(name="customers", required_columns=[], optional_columns=[]),
-        TableSchema(name="products", required_columns=[], optional_columns=[]),
-        TableSchema(name="stores", required_columns=[], optional_columns=[]),
-        TableSchema(name="inventory", required_columns=[], optional_columns=[]),
-        TableSchema(name="transactions", required_columns=[], optional_columns=[]),
-        TableSchema(name="shipments", required_columns=[], optional_columns=[]),
-        TableSchema(name="web_clickstream", required_columns=[], optional_columns=[]),
-    ]
+    schemas = [TableSchema(name=name, required_columns=[], optional_columns=[]) for name, _ in TABLE_CSV_PAIRS]
     return SchemaRegistry(schemas)
+
+
+def run_all(pipeline: "BatchIngestionPipeline") -> Dict[str, int]:
+    """Run ingestion for every table in TABLE_CSV_PAIRS.
+
+    Returns aggregated {'total_rows', 'quarantined_rows'} across all tables.
+    """
+    total_rows = 0
+    quarantined_rows = 0
+    for table_name, csv_filename in TABLE_CSV_PAIRS:
+        result = pipeline.run_for_table(table_name, csv_filename)
+        total_rows += result["valid_rows"]
+        quarantined_rows += result["quarantined_rows"]
+    return {"total_rows": total_rows, "quarantined_rows": quarantined_rows}
 
 
 if __name__ == "__main__":
     registry = default_schema_registry()
     pipeline = BatchIngestionPipeline(registry)
-
-    # Run ingestion for all tables
-    pipeline.run_for_table("customers", "customers.csv")
-    pipeline.run_for_table("products", "products.csv")
-    pipeline.run_for_table("stores", "stores.csv")
-    pipeline.run_for_table("inventory", "inventory.csv")
-    pipeline.run_for_table("transactions", "transactions.csv")
-    pipeline.run_for_table("shipments", "shipments.csv")
-    pipeline.run_for_table("web_clickstream", "web_clickstream.csv")
+    run_all(pipeline)
 
 

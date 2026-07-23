@@ -5,6 +5,8 @@ from src.analytics.kpi import (
     get_city_sales,
     get_customer_distribution,
     get_stockout_risks,
+    get_inventory_turnover,
+    get_delivery_performance,
     get_top_product_pairs,
     get_ai_decisions
 )
@@ -39,6 +41,14 @@ def customer_distribution():
 @app.get("/api/kpi/stockout-risks")
 def stockout_risks():
     return get_stockout_risks()
+
+@app.get("/api/kpi/inventory-turnover")
+def inventory_turnover():
+    return get_inventory_turnover()
+
+@app.get("/api/kpi/delivery-performance")
+def delivery_performance():
+    return get_delivery_performance()
 
 @app.get("/api/kpi/top-product-pairs")
 def top_product_pairs():

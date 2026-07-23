@@ -7,12 +7,19 @@ Drops and recreates all dimension and fact tables, then loads from:
 - data/raw/stores.csv        → dim_store
 - generate_series 2024        → dim_date
 - data/raw/transactions_cleaned.parquet → fact_sales (with FK joins)
+- data/raw/inventory.csv      → fact_inventory (via populate_inventory)
+- data/raw/shipments.csv      → fact_shipments (via populate_shipments)
 
-Run: python src/transformation/build_schema.py
+Run: python -m src.transformation.build_schema
 """
 
+import sys
 import duckdb
 from pathlib import Path
+
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
+from src.storage.populate_inventory import populate_inventory
+from src.storage.populate_shipments import populate_shipments
 
 DB_PATH = Path("data/warehouse/retail.duckdb")
 RAW_DIR = Path("data/raw")
@@ -266,8 +273,9 @@ def _create_fact_sales(con: duckdb.DuckDBPyConnection) -> None:
 
 
 def _create_placeholder_tables(con: duckdb.DuckDBPyConnection) -> None:
-    """Create remaining tables (empty) to avoid schema drift."""
-    print("\n--- Placeholder tables ---")
+    """Create fact_inventory / fact_shipments schemas (populated separately) and
+    dim_external_events (genuinely unused, kept empty to avoid schema drift)."""
+    print("\n--- dim_external_events, fact_inventory, fact_shipments (schema only) ---")
     con.execute("""
         CREATE TABLE dim_external_events (
             event_id BIGINT,
@@ -297,7 +305,13 @@ def _create_placeholder_tables(con: duckdb.DuckDBPyConnection) -> None:
             on_time_flag BOOLEAN
         )
     """)
-    print("  dim_external_events, fact_inventory, fact_shipments created (empty).")
+    print("  Tables created.")
+
+
+def _load_inventory_and_shipments(con: duckdb.DuckDBPyConnection) -> None:
+    """Populate fact_inventory and fact_shipments now that fact_sales/dims exist."""
+    populate_inventory(con)
+    populate_shipments(con)
 
 
 def build_star_schema() -> None:
@@ -318,9 +332,10 @@ def build_star_schema() -> None:
         _create_dim_store(con)
         _create_fact_sales(con)
         _create_placeholder_tables(con)
+        _load_inventory_and_shipments(con)
 
         print("\n--- Final row counts ---")
-        for table in ["dim_product", "dim_customer", "dim_store", "dim_date", "fact_sales"]:
+        for table in ["dim_product", "dim_customer", "dim_store", "dim_date", "fact_sales", "fact_inventory", "fact_shipments"]:
             n = con.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
             print(f"  {table}: {n:,}")
         print("\nStar schema build complete.")

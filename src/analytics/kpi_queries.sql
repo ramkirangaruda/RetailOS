@@ -109,50 +109,98 @@ ORDER BY total_revenue DESC
 LIMIT 10;
 
 -- =====================================================
--- 5. Inventory Turnover Ratio
+-- 5. Product Sales Velocity (movement category)
 -- =====================================================
--- Description: Product sales velocity and turnover analysis
--- Dependencies: fact_sales, dim_product
+-- Description: Sales-side movement classification (fast/medium/slow moving).
+-- NOTE: this is a sell-through proxy, NOT the inventory turnover ratio below
+-- -- it never touches fact_inventory. sales_span_days/first/last_sale_date
+-- come from dim_date.date, not from subtracting date_key integers directly
+-- (date_key is YYYYMMDD, e.g. 20240301 - 20240228 = 73, not 2 days).
+-- Dependencies: fact_sales, dim_product, dim_date
 
-SELECT 
+WITH sales_span AS (
+    SELECT
+        fs.product_key,
+        SUM(fs.quantity) as total_sold,
+        SUM(fs.revenue) as total_revenue,
+        COUNT(DISTINCT fs.date_key) as days_sold,
+        MIN(dd.date) as first_sale_date,
+        MAX(dd.date) as last_sale_date
+    FROM fact_sales fs
+    JOIN dim_date dd ON fs.date_key = dd.date_key
+    GROUP BY fs.product_key
+)
+SELECT
     dp.product_id,
     dp.name as product_name,
     dp.category,
     dp.price,
-    SUM(fs.quantity) as total_sold,
-    SUM(fs.revenue) as total_revenue,
-    COUNT(DISTINCT fs.date_key) as days_sold,
-    MIN(fs.date_key) as first_sale_date,
-    MAX(fs.date_key) as last_sale_date,
-    SUM(fs.quantity) * 1.0 / NULLIF(COUNT(DISTINCT fs.date_key), 0) as avg_daily_sales,
-    (MAX(fs.date_key) - MIN(fs.date_key)) as sales_span_days,
-    CASE 
-        WHEN SUM(fs.quantity) * 1.0 / NULLIF(COUNT(DISTINCT fs.date_key), 0) > 10 THEN 'Fast Moving'
-        WHEN SUM(fs.quantity) * 1.0 / NULLIF(COUNT(DISTINCT fs.date_key), 0) > 2 THEN 'Medium Moving'
+    ss.total_sold,
+    ss.total_revenue,
+    ss.days_sold,
+    ss.first_sale_date,
+    ss.last_sale_date,
+    ss.total_sold * 1.0 / NULLIF(ss.days_sold, 0) as avg_daily_sales,
+    DATE_DIFF('day', ss.first_sale_date, ss.last_sale_date) as sales_span_days,
+    CASE
+        WHEN ss.total_sold * 1.0 / NULLIF(ss.days_sold, 0) > 10 THEN 'Fast Moving'
+        WHEN ss.total_sold * 1.0 / NULLIF(ss.days_sold, 0) > 2 THEN 'Medium Moving'
         ELSE 'Slow Moving'
     END as movement_category,
-    ROUND((SUM(fs.quantity) * 1.0 / NULLIF(COUNT(DISTINCT fs.date_key), 0)) * 30, 2) as projected_monthly_sales,
-    ROUND((SUM(fs.quantity) * 1.0 / NULLIF(COUNT(DISTINCT fs.date_key), 0)) * 365, 2) as projected_annual_sales
-FROM fact_sales fs
-JOIN dim_product dp ON fs.product_key = dp.product_key
-GROUP BY dp.product_id, dp.name, dp.category, dp.price
+    ROUND((ss.total_sold * 1.0 / NULLIF(ss.days_sold, 0)) * 30, 2) as projected_monthly_sales,
+    ROUND((ss.total_sold * 1.0 / NULLIF(ss.days_sold, 0)) * 365, 2) as projected_annual_sales
+FROM sales_span ss
+JOIN dim_product dp ON dp.product_key = ss.product_key
 ORDER BY avg_daily_sales DESC;
+
+-- =====================================================
+-- 5b. Inventory Turnover Ratio
+-- =====================================================
+-- Description: units sold per unit of average stock held, using actual
+-- daily stock snapshots in fact_inventory (populated by
+-- src/storage/populate_inventory.py).
+-- Dependencies: fact_sales, fact_inventory, dim_product
+
+WITH avg_inventory AS (
+    SELECT product_key, AVG(stock_level) as avg_stock_level
+    FROM fact_inventory
+    GROUP BY product_key
+),
+sold AS (
+    SELECT product_key, SUM(quantity) as total_units_sold
+    FROM fact_sales
+    GROUP BY product_key
+)
+SELECT
+    dp.product_id,
+    dp.name as product_name,
+    dp.category,
+    s.total_units_sold,
+    ROUND(ai.avg_stock_level, 2) as avg_stock_level,
+    ROUND(s.total_units_sold / NULLIF(ai.avg_stock_level, 0), 2) as inventory_turnover_ratio
+FROM sold s
+JOIN avg_inventory ai ON ai.product_key = s.product_key
+JOIN dim_product dp ON dp.product_key = s.product_key
+ORDER BY inventory_turnover_ratio DESC;
 
 -- =====================================================
 -- 6. Average Delivery Time
 -- =====================================================
--- Description: Delivery performance metrics (placeholder implementation)
--- Dependencies: fact_sales, dim_date
+-- Description: Real delivery performance from fact_shipments (populated by
+-- src/storage/populate_shipments.py from shipments.csv's ship_date/
+-- delivery_date). on_time_flag uses a 5-day threshold (the median observed
+-- delivery_time in this dataset; the source has no explicit SLA).
+-- Dependencies: fact_shipments, dim_date
 
-SELECT 
+SELECT
     DATE_TRUNC('month', dd.date) as delivery_month,
-    COUNT(fs.sale_id) as total_deliveries,
-    AVG(1) as avg_delivery_days,
-    MIN(1) as min_delivery_days,
-    MAX(1) as max_delivery_days,
-    1 as median_delivery_days
-FROM fact_sales fs
-JOIN dim_date dd ON fs.date_key = dd.date_key
+    COUNT(*) as total_deliveries,
+    ROUND(AVG(fsh.delivery_time), 2) as avg_delivery_days,
+    MIN(fsh.delivery_time) as min_delivery_days,
+    MAX(fsh.delivery_time) as max_delivery_days,
+    ROUND(100.0 * SUM(CASE WHEN fsh.on_time_flag THEN 1 ELSE 0 END) / COUNT(*), 2) as on_time_pct
+FROM fact_shipments fsh
+JOIN dim_date dd ON dd.date_key = fsh.date_key
 GROUP BY DATE_TRUNC('month', dd.date)
 ORDER BY delivery_month DESC;
 
@@ -239,38 +287,103 @@ ORDER BY dd.date DESC;
 -- =====================================================
 -- 9. Customer Lifetime Value (CLV)
 -- =====================================================
--- Description: Customer value analysis with segmentation
--- Dependencies: fact_sales, dim_customer
+-- Description: avg_clv is the average per-customer lifetime revenue
+-- (aggregated per customer first, then averaged within the city) rather
+-- than the average transaction value. customer_lifespan_days comes from
+-- real dim_date.date values, not date_key integer subtraction.
+-- Dependencies: fact_sales, dim_customer, dim_date
 
-SELECT 
-    dc.city,
-    CASE 
-        WHEN dc.city IN ('Mumbai', 'Delhi', 'Bangalore') THEN 'Metro'
-        WHEN dc.city IN ('Pune', 'Hyderabad', 'Chennai') THEN 'Tier-1'
+WITH customer_agg AS (
+    SELECT
+        fs.customer_key,
+        dc.city,
+        SUM(fs.revenue) as customer_revenue,
+        COUNT(fs.sale_id) as customer_transactions,
+        MIN(dd.date) as first_purchase_date,
+        MAX(dd.date) as last_purchase_date
+    FROM fact_sales fs
+    JOIN dim_customer dc ON fs.customer_key = dc.customer_key
+    JOIN dim_date dd ON fs.date_key = dd.date_key
+    GROUP BY fs.customer_key, dc.city
+)
+SELECT
+    city,
+    CASE
+        WHEN city IN ('Mumbai', 'Delhi', 'Bangalore') THEN 'Metro'
+        WHEN city IN ('Pune', 'Hyderabad', 'Chennai') THEN 'Tier-1'
         ELSE 'Tier-2'
     END as city_tier,
-    COUNT(DISTINCT fs.customer_key) as customer_count,
-    SUM(fs.revenue) as total_revenue,
-    AVG(fs.revenue) as avg_clv,
-    COUNT(fs.sale_id) as total_transactions,
-    AVG(fs.revenue) as avg_transaction_value,
-    (MAX(fs.date_key) - MIN(fs.date_key)) as customer_lifespan_days,
-    CASE 
-        WHEN COUNT(fs.sale_id) = 1 THEN 'One-time'
-        WHEN COUNT(fs.sale_id) <= 5 THEN 'Occasional'
-        WHEN COUNT(fs.sale_id) <= 15 THEN 'Regular'
+    COUNT(*) as customer_count,
+    SUM(customer_revenue) as total_revenue,
+    AVG(customer_revenue) as avg_clv,
+    SUM(customer_transactions) as total_transactions,
+    SUM(customer_revenue) / SUM(customer_transactions) as avg_transaction_value,
+    AVG(DATE_DIFF('day', first_purchase_date, last_purchase_date)) as customer_lifespan_days,
+    CASE
+        WHEN AVG(customer_transactions) <= 1 THEN 'One-time'
+        WHEN AVG(customer_transactions) <= 5 THEN 'Occasional'
+        WHEN AVG(customer_transactions) <= 15 THEN 'Regular'
         ELSE 'Loyal'
     END as purchase_frequency_segment,
-    CASE 
-        WHEN SUM(fs.revenue) < 1000 THEN 'Low Value'
-        WHEN SUM(fs.revenue) < 5000 THEN 'Medium Value'
-        WHEN SUM(fs.revenue) < 20000 THEN 'High Value'
+    CASE
+        WHEN AVG(customer_revenue) < 1000 THEN 'Low Value'
+        WHEN AVG(customer_revenue) < 5000 THEN 'Medium Value'
+        WHEN AVG(customer_revenue) < 20000 THEN 'High Value'
         ELSE 'Premium'
     END as value_segment
-FROM fact_sales fs
-JOIN dim_customer dc ON fs.customer_key = dc.customer_key
-GROUP BY dc.city
+FROM customer_agg
+GROUP BY city
 ORDER BY total_revenue DESC;
+
+-- =====================================================
+-- 10. Market Basket Analysis (frequently bought together)
+-- =====================================================
+-- Description: fact_sales has one row per line item, not a shared order id,
+-- so a 'basket' is approximated as everything a customer bought on the same
+-- day. Returns co-occurrence count, confidence (P(B|A)), and lift per pair.
+-- Dependencies: fact_sales, dim_product
+
+WITH baskets AS (
+    SELECT
+        (customer_key::VARCHAR || '_' || date_key::VARCHAR) as basket_id,
+        product_key
+    FROM fact_sales
+),
+basket_totals AS (
+    SELECT COUNT(DISTINCT basket_id) as n FROM baskets
+),
+product_basket_counts AS (
+    SELECT product_key, COUNT(DISTINCT basket_id) as basket_count
+    FROM baskets
+    GROUP BY product_key
+),
+pairs AS (
+    SELECT
+        a.product_key as product_a_key,
+        b.product_key as product_b_key,
+        COUNT(DISTINCT a.basket_id) as co_occurrence_count
+    FROM baskets a
+    JOIN baskets b ON a.basket_id = b.basket_id AND a.product_key < b.product_key
+    GROUP BY a.product_key, b.product_key
+)
+SELECT
+    dpa.product_id as product_a,
+    dpb.product_id as product_b,
+    pairs.co_occurrence_count,
+    ROUND(pairs.co_occurrence_count * 1.0 / pca.basket_count, 4) as confidence,
+    ROUND(
+        (pairs.co_occurrence_count * 1.0 / pca.basket_count)
+        / (pcb.basket_count * 1.0 / bt.n),
+        4
+    ) as lift
+FROM pairs
+JOIN product_basket_counts pca ON pca.product_key = pairs.product_a_key
+JOIN product_basket_counts pcb ON pcb.product_key = pairs.product_b_key
+CROSS JOIN basket_totals bt
+JOIN dim_product dpa ON dpa.product_key = pairs.product_a_key
+JOIN dim_product dpb ON dpb.product_key = pairs.product_b_key
+ORDER BY pairs.co_occurrence_count DESC, lift DESC
+LIMIT 20;
 
 -- =====================================================
 -- Additional Utility Queries
