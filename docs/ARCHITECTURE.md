@@ -74,7 +74,7 @@ flowchart TD
 
     subgraph API["API layer (src/api/)"]
         AUTH["auth.py\nX-API-Key -> role\n(analyst < store_manager < finance < admin)"]
-        SERVER["server.py (FastAPI)\n/api/kpi/*  (role >= analyst)\n/api/analyst/sales, /api/finance/sales,\n/api/admin/summary (role-gated,\nqueries the RBAC views above)"]
+        SERVER["server.py (FastAPI)\n/api/kpi/*  (role >= analyst)\n/api/analyst/sales, /api/store-manager/sales\n(store-filtered by API key), /api/finance/sales,\n/api/admin/summary (role-gated,\nqueries the RBAC views above)"]
     end
 
     KPI --> SERVER

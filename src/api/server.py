@@ -13,8 +13,13 @@ from src.analytics.kpi import (
     get_top_product_pairs,
     get_ai_decisions
 )
-from src.analytics.secure_views import get_analyst_sales, get_finance_sales, get_admin_summary
-from src.api.auth import require_role
+from src.analytics.secure_views import (
+    get_analyst_sales,
+    get_store_manager_sales,
+    get_finance_sales,
+    get_admin_summary,
+)
+from src.api.auth import Identity, require_identity, require_role
 from src.storage.access_control import create_rbac_views
 from src.storage.warehouse import get_connection
 
@@ -93,6 +98,16 @@ def ai_decisions(role: str = Depends(require_role("analyst"))):
 def analyst_sales(limit: int = 100, role: str = Depends(require_role("analyst"))):
     """Sales with customer phone/email masked, no cost/profit."""
     return get_analyst_sales(limit)
+
+@app.get("/api/store-manager/sales")
+def store_manager_sales(limit: int = 100, identity: Identity = Depends(require_identity("store_manager"))):
+    """Sales with customer phone/email masked, scoped to the caller's
+    assigned store (identity.store_id, set per-API-key - see
+    src/api/auth.py). A finance/admin key with no store_id assigned sees
+    all stores; a store_manager key with no store_id assigned is
+    misconfigured but still only sees masked data, never unfiltered by
+    accident of privilege escalation."""
+    return get_store_manager_sales(identity.store_id, limit)
 
 @app.get("/api/finance/sales")
 def finance_sales(limit: int = 100, role: str = Depends(require_role("finance"))):

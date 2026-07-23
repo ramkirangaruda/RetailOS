@@ -27,6 +27,30 @@ def get_analyst_sales(limit: int = 100):
         return df.to_dict(orient="records")
 
 
+def get_store_manager_sales(store_id: str | None = None, limit: int = 100):
+    """Sales with PII masked, scoped to a single store when store_id is
+    given (a store_manager's assigned store - see src/api/auth.py). If
+    store_id is None (e.g. a finance/admin caller with no store
+    assignment probing this route), returns unfiltered results."""
+    query = """
+        SELECT sm.sale_id, sm.date_key, sm.product_key, sm.store_key,
+               ds.store_id, ds.store_name,
+               sm.quantity, sm.revenue, sm.phone_masked, sm.email_masked, sm.customer_city
+        FROM store_manager_sales sm
+        JOIN dim_store ds ON sm.store_key = ds.store_key
+    """
+    params: list = []
+    if store_id:
+        query += " WHERE ds.store_id = ?"
+        params.append(store_id)
+    query += " ORDER BY sm.date_key DESC LIMIT ?"
+    params.append(limit)
+
+    with get_connection(read_only=True) as con:
+        df = con.execute(query, params).fetchdf()
+        return df.to_dict(orient="records")
+
+
 def get_finance_sales(limit: int = 100):
     """Full sales detail: unmasked customer PII and per-line profit."""
     with get_connection(read_only=True) as con:

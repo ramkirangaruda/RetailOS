@@ -1,303 +1,230 @@
 # Data Ingestion Architecture in RetailOS
 
-## 🔄 Overview
+## Overview
 
-RetailOS has a **sophisticated multi-layered data ingestion system** that handles both batch and real-time data with adaptive schema management. Here's how data continuously flows into your system:
+RetailOS ingests data via batch CSV processing, a scheduler that automates
+that batch process, and a near-real-time WebSocket order stream. A prior
+version of this document called the system "production-ready" and
+"designed to run 24/7" - it can run continuously, but several pieces are
+narrower than that framing suggested (schema-drift detection only covers
+one table; the "adaptive schema manager" isn't wired into what actually
+gets ingested). Corrected below.
 
 ---
 
 ## 1. Batch Ingestion Pipeline
 
-**File:** [src/ingestion/batch_pipeline.py](file:///c:/Users/ramki/retail-os/src/ingestion/batch_pipeline.py)
+**File:** `src/ingestion/batch_pipeline.py`
 
-### What It Does
-Processes CSV files from `data/raw/` directory in batches with intelligent validation.
+### What it does
+Reads each CSV in `data/raw/`, validates against a schema registry,
+quarantines invalid rows, writes valid rows to timestamped Parquet.
 
-### Key Features
-- ✅ **Schema validation** against a registry
-- ✅ **Auto-retry** on read failures (exponential backoff)
-- ✅ **Quarantine system** for invalid records
-- ✅ **Schema drift detection** (new columns logged, not rejected)
-- ✅ **Parquet output** with timestamps
+### Key features
+- ✅ Auto-retry on read failures (exponential backoff, real -
+  `_read_with_retries`)
+- ✅ Quarantine system for invalid records, with a `quarantine_reason` column
+- ⚠️ Schema validation - real, but `default_schema_registry()` currently
+  registers every table with `required_columns=[]`, so in practice no rows
+  ever get quarantined for missing/invalid required fields. The mechanism
+  works; it's just not configured with any actual required columns today.
+- ✅ Schema drift *logging* (new/unexpected columns are logged, not
+  rejected) - this part of `_validate_and_split` works regardless of the
+  empty required-columns list.
 
-### Data Flow
+### Data flow
 ```
 CSV Files (data/raw/)
-    ↓
+    v
 Read with retries
-    ↓
-Validate against schema
-    ↓
+    v
+Validate against schema (currently: no required columns configured)
+    v
 Split: Valid vs Invalid
-    ↓
-Valid → Parquet (data/raw/*.parquet)
-Invalid → Quarantine (data/quarantine/*.csv)
+    v
+Valid -> Parquet (data/raw/{table}_{timestamp}.parquet)
+Invalid -> Quarantine (data/quarantine/{table}_quarantine_{timestamp}.csv)
 ```
 
-### Tables Processed
-- `customers.csv`
-- `products.csv`
-- `stores.csv`
-- `inventory.csv`
-- `transactions.csv`
-- `shipments.csv`
-- `web_clickstream.csv`
+### Tables processed
+Defined once in `batch_pipeline.TABLE_CSV_PAIRS` (used by both
+`default_schema_registry()` and `run_all()`, so they can't drift apart):
+`customers`, `products`, `stores`, `inventory`, `transactions`,
+`shipments`, `web_clickstream`.
 
-### Run Manually
+### Run manually
 ```bash
-cd src/ingestion
-python batch_pipeline.py
+python -m src.ingestion.batch_pipeline
 ```
 
 ---
 
 ## 2. Automated Batch Scheduler
 
-**File:** [src/ingestion/batch_scheduler.py](file:///c:/Users/ramki/retail-os/src/ingestion/batch_scheduler.py)
+**File:** `src/ingestion/batch_scheduler.py`
 
-### What It Does
-**Automated scheduling** using APScheduler to run pipelines continuously without manual intervention.
+### Scheduled jobs
+| Job | Frequency | What it actually does |
+|-----|-----------|------------------------|
+| **Batch Ingestion** | Every 6 hours | `run_all(pipeline)` over all 7 tables, then `DataCleaner().run()` (transactions only), then `partition_fact_sales()` |
+| **ML Retraining** | Daily at 2 AM | Constructs a fresh `MLPredictiveEngine()` (trains automatically in `__init__`) |
+| **Data Quality Checks** | Every 30 minutes | Counts recent rows in `quarantine_log` if that table exists (best-effort, wrapped in try/except) |
+| **Log Cleanup** | Weekly (Sunday 3 AM) | Deletes `pipeline_runs` older than 90 days |
 
-### Scheduled Jobs
+### Pipeline stages (Stage 1 of `run_batch_ingestion`)
+1. **Stage 1**: `run_all(pipeline)` - ingest all 7 tables (see above)
+2. **Stage 2**: `DataCleaner().run()` - cleans `transactions.csv` only
+   (dedup, null-fill, negative-price fix, future-date filter, anomaly
+   flagging); writes `docs/DATA_QUALITY.md` as evidence
+3. **Stage 3**: `partition_fact_sales()` - writes a partitioned Parquet
+   copy of `fact_sales` (see `docs/STORAGE.md` for real benchmark numbers
+   - it's measurably *slower* than the native DuckDB table at this data
+   volume, not faster)
 
-| Job | Frequency | Description |
-|-----|-----------|-------------|
-| **Batch Ingestion** | Every 6 hours | Runs full batch pipeline (0:00, 6:00, 12:00, 18:00) |
-| **ML Retraining** | Daily at 2 AM | Retrains all ML models with latest data |
-| **Data Quality Checks** | Every 30 minutes | Monitors quarantine rates and anomalies |
-| **Log Cleanup** | Weekly (Sunday 3 AM) | Removes old pipeline logs (>90 days) |
+**Note:** none of these three stages loads data into the DuckDB warehouse
+tables (`dim_*`/`fact_*`) - that only happens via
+`src/transformation/build_schema.py`, which is a separate, full rebuild
+step (drops and recreates every table), not part of the scheduler's
+incremental cycle. Running the scheduler alone does not update the
+warehouse the API/dashboards actually query.
 
-### Pipeline Stages
-1. **Stage 1**: Ingest data with adaptive schema
-2. **Stage 2**: Clean data (remove duplicates, fix nulls)
-3. **Stage 3**: Partition storage for optimization
+### Monitoring tables
+- `pipeline_runs` - one row per scheduler run, with status/timing/row counts
+- `pipeline_metrics` - per-run metrics (duplicates_removed, nulls_fixed,
+  anomalies_flagged from the cleaning stage)
 
-### Monitoring Tables
-- `pipeline_runs` - Tracks every pipeline execution
-- `pipeline_metrics` - Stores quality metrics per run
-
-### Run Scheduler
+### Run the scheduler
 ```bash
-cd src/ingestion
-python batch_scheduler.py
+python -m src.ingestion.batch_scheduler
 ```
-
-For testing (single run):
+Test mode (single immediate run, no recurring schedule):
 ```python
-scheduler = BatchPipelineScheduler()
-scheduler.start(test_mode=True)
+from src.ingestion.batch_scheduler import BatchPipelineScheduler
+BatchPipelineScheduler().start(test_mode=True)
 ```
 
 ---
 
 ## 3. Real-Time WebSocket Streaming
 
-**File:** [src/ingestion/websocket_streaming.py](file:///c:/Users/ramki/retail-os/src/ingestion/websocket_streaming.py)
+**File:** `src/ingestion/websocket_streaming.py`
 
-### What It Does
-**Generates and streams live orders** in real-time via WebSocket connections.
+- Generates simulated orders on an interval and writes them to a
+  `streaming_orders` table, broadcasting to any connected WebSocket clients.
+- **Host/Port**: `ws://localhost:8765` (configurable via `WS_HOST`/`WS_PORT`).
 
-### Features
-- 🔴 **Live order generation** (1-5 second intervals)
-- 🔴 **WebSocket broadcasting** to all connected clients
-- 🔴 **Instant database writes** to `streaming_orders` table
-- 🔴 **Real-time stats** (revenue, orders, customers)
-
-### Order Data Structure
-```python
-{
-    'order_id': 12345,
-    'timestamp': '2026-02-13T17:28:07',
-    'product_id': 234,
-    'customer_id': 5678,
-    'store_id': 12,
-    'quantity': 3,
-    'price': 2499.99,
-    'payment_method': 'UPI',
-    'order_source': 'App'
-}
-```
-
-### WebSocket Server
-- **Host**: `localhost`
-- **Port**: `8765`
-- **Protocol**: `ws://localhost:8765`
-
-### Run Streaming Server
+### Run
 ```bash
-cd src/ingestion
-python websocket_streaming.py
-```
-
-### Client Connection
-```javascript
-const ws = new WebSocket('ws://localhost:8765');
-ws.onmessage = (event) => {
-    const order = JSON.parse(event.data);
-    console.log('New order:', order);
-};
+python src/ingestion/websocket_streaming.py
 ```
 
 ---
 
 ## 4. Adaptive Schema Management
 
-**File:** [src/ingestion/adaptive_schema_manager.py](file:///c:/Users/ramki/retail-os/src/ingestion/adaptive_schema_manager.py)
+**File:** `src/ingestion/adaptive_schema_manager.py`
 
-### What It Does
-**Intelligently handles schema evolution** without breaking the pipeline.
+### What it actually covers
+`AdaptiveSchemaManager.initialize_registry()` registers a schema for
+**`transactions` only** - `customers`, `products`, `stores`, `inventory`,
+`shipments`, `web_clickstream` have no registered schema, so
+`detect_schema_changes()` always returns `([], [])` for those 6 tables
+(nothing to compare against). If you need drift detection on other
+tables, `initialize_registry()` needs entries added for them.
 
-### Multi-Stage Detection
+### Confidence scoring
+`_calculate_confidence()` combines null ratio, uniqueness ratio, and
+whether the column is non-`object` dtype into a 0.0-1.0 score.
 
-#### Stage 1: Column Detection
-- Detects new columns
-- Detects missing required columns
-- Detects type changes
-
-#### Stage 2: Confidence Scoring
-Calculates confidence (0.0-1.0) based on:
-- **Naming convention** (contains `id`, `name`, `price`, etc.)
-- **Completeness** (low null percentage)
-- **Type consistency** (can be cast to expected type)
-- **Value distribution** (reasonable uniqueness)
-
-#### Stage 3: Noise Reduction Strategy
-
+### Noise reduction strategy
 | Scenario | Action | Threshold |
 |----------|--------|-----------|
-| Single high-confidence change | Auto-approve | ≥75% confidence |
-| Multiple high-confidence changes (≤3) | Auto-approve | All ≥75% |
-| Mixed confidence batch | Batch approval required | Some <75% |
-| Mass low-confidence changes (>5) | Quarantine all | Likely corrupt |
+| ≤3 changes, all high-confidence | Auto-approve | all ≥0.75 |
+| Mixed confidence | Manual review queue | some <0.75 |
+| >5 low-confidence changes | Quarantine all | likely corrupt data |
 
-### Schema Change Tracking
-- `schema_change_log` - All detected changes with confidence scores
-- `schema_approval_queue` - Changes awaiting admin review
+### Tracking tables
+`schema_change_log`, `schema_approval_queue` - both created by
+`initialize_registry()`.
 
-### Example Workflow
-```
-New column "customer_email" detected
-    ↓
-Confidence calculated: 0.85 (high)
-    ↓
-Auto-approved and added to schema
-    ↓
-Logged in schema_change_log
-    ↓
-Data processed normally
-```
+### Is this wired into the batch pipeline?
+**Not automatically.** `AdaptiveSchemaManager` and `BatchIngestionPipeline`
+are two separate classes today; `batch_scheduler.py` constructs and
+initializes a schema manager at the start of each run mainly so its
+tracking tables exist, but `BatchIngestionPipeline.run_for_table()`
+doesn't call into it per-row. `src/verify_runtime.py` is the one place
+that exercises `detect_schema_changes()` directly, with a hand-built test
+DataFrame.
 
 ---
 
-## 5. How Data Keeps Flowing
+## 5. Data quality & monitoring
 
-### Continuous Ingestion Methods
+### Quarantine system
+`data/quarantine/{table}_quarantine_{timestamp}.csv`, with a
+`quarantine_reason` column - real, but currently produces no rows in
+practice since no table has required columns configured (see section 1).
 
-#### Method 1: Automated Scheduler (Recommended)
-```bash
-# Start the scheduler - runs forever
-python src/ingestion/batch_scheduler.py
-```
-- Runs batch ingestion every 6 hours
-- Retrains ML models daily
-- Monitors data quality every 30 minutes
-
-#### Method 2: Real-Time Streaming
-```bash
-# Start WebSocket server - generates orders continuously
-python src/ingestion/websocket_streaming.py
-```
-- Generates orders every 1-5 seconds
-- Writes directly to `streaming_orders` table
-- Broadcasts to connected dashboards
-
-#### Method 3: Manual Batch Runs
-```bash
-# Run once manually
-python src/ingestion/batch_pipeline.py
-```
-
----
-
-## 6. Data Quality & Monitoring
-
-### Quarantine System
-Invalid records are **not discarded** but quarantined with reasons:
-- `data/quarantine/{table}_quarantine_{timestamp}.csv`
-- Includes `quarantine_reason` column explaining the issue
-
-### Common Quarantine Reasons
-- `missing_required_column:customer_id`
-- `missing_required_value:price`
-- `type_mismatch:expected_int_got_string`
-
-### Pipeline Monitoring
-View in Streamlit dashboard:
+### Pipeline monitoring
 ```bash
 streamlit run src/app_enhanced.py
 ```
-
-Navigate to **Tab 4: Pipeline Monitoring** to see:
-- Success rate over time
-- Rows processed per run
-- Duration trends
-- Quarantine rates
+Tab 4 (Pipeline Monitoring) reads real data from `pipeline_runs`.
 
 ---
 
-## 7. Integration with Transformation Layer
+## 6. Integration with the transformation/storage layer
 
-After ingestion, data flows to transformation:
+Accurate order of operations for a full rebuild:
 
 ```
-Batch Ingestion
-    ↓
-Data Cleaning (src/transformation/data_cleaning.py)
-    ↓
-Partitioning (src/storage/partitioning.py)
-    ↓
-DuckDB Warehouse (data/warehouse/retail.duckdb)
-    ↓
-Analytics & ML
+data_generator.py (Faker)
+    v
+data/raw/*.csv
+    v
+data_cleaning.py -> transactions_cleaned.parquet, docs/DATA_QUALITY.md
+    v
+build_schema.py
+    - drops/recreates dim_customer, dim_product, dim_store, dim_date
+    - loads fact_sales from transactions_cleaned.parquet
+    - calls populate_inventory() -> fact_inventory
+    - calls populate_shipments() -> fact_shipments
+    v
+data/warehouse/retail.duckdb (the tables the API/dashboards query)
+    v
+access_control.py's create_rbac_views() (also run at API startup)
+    v
+Analytics (kpi.py) & ML (ml_predictive_engine.py)
 ```
+
+`partitioning.py` is a side branch off `fact_sales` (writes a partitioned
+Parquet copy), not a step in this main chain - nothing downstream reads
+from the partitioned copy.
 
 ---
 
-## 8. Production Deployment
+## 7. Environment variables
 
-### Recommended Setup
-
-1. **Start Scheduler** (background process)
-   ```bash
-   nohup python src/ingestion/batch_scheduler.py &
-   ```
-
-2. **Start WebSocket Server** (optional, for real-time)
-   ```bash
-   nohup python src/ingestion/websocket_streaming.py &
-   ```
-
-3. **Monitor Logs**
-   ```bash
-   tail -f logs/batch_pipeline.log
-   ```
-
-### Environment Variables
-Set in `.env` or `config.py`:
-- `DB_PATH` - Path to DuckDB warehouse
-- `MODELS_DIR` - Path to ML models directory
+Set via `.env` (copy `.env.example`) or `src/config.py`:
+- `DB_PATH` - path to the DuckDB warehouse (`src/config.py`)
+- `RETAILOS_API_KEYS` - role-based API keys for the backend (see
+  `docs/STORAGE.md`)
+- `WS_HOST`/`WS_PORT` - WebSocket streaming server address
 
 ---
 
 ## Summary
 
-**Your data ingestion is highly automated:**
-
-✅ **Batch ingestion** runs every 6 hours automatically  
-✅ **Real-time streaming** generates orders continuously  
-✅ **Adaptive schema** handles new columns intelligently  
-✅ **Quality monitoring** quarantines bad data with reasons  
-✅ **ML retraining** happens daily with fresh data  
-✅ **Full observability** via Streamlit dashboard  
-
-The system is **production-ready** and designed to run 24/7 with minimal manual intervention!
+- **Batch ingestion**: real retry logic, real quarantine mechanism (not
+  currently triggered by any configured required columns), real
+  Parquet output.
+- **Scheduler**: real, automates ingestion/cleaning/partitioning/ML
+  retraining - but does not itself rebuild the DuckDB warehouse tables;
+  that's a separate manual/scripted step (`build_schema.py`).
+- **Real-time streaming**: real, generates and broadcasts simulated orders.
+- **Adaptive schema management**: real for the one table it's registered
+  for (`transactions`); not wired into the other 6 tables or into the
+  batch pipeline's row-level validation.
+- **ML retraining**: real, but "retraining" is just re-instantiating
+  `MLPredictiveEngine` - there's no separate train-only API and no Prophet
+  component to retrain (see `docs/ai_usage_overview.md`).

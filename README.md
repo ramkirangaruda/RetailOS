@@ -97,17 +97,19 @@ uvicorn src.api.server:app --reload
 
 **Output:** API running at `http://localhost:8000`
 
-**Auth:** every `/api/kpi/*`, `/api/analyst/*`, `/api/finance/*`, and
-`/api/admin/*` route requires an `X-API-Key` header (role-based access
-control, see `src/api/auth.py`). `/health` does not. Demo keys for local
-development (override via `RETAILOS_API_KEYS` env var):
+**Auth:** every `/api/kpi/*`, `/api/analyst/*`, `/api/store-manager/*`,
+`/api/finance/*`, and `/api/admin/*` route requires an `X-API-Key` header
+(role-based access control, see `src/api/auth.py`). `/health` does not.
+Demo keys for local development (override via `RETAILOS_API_KEYS` env var,
+format `key:role` or `key:role:store_id` for store managers, e.g.
+`sm-st007-key:store_manager:ST007`):
 
-| Role | Demo key |
-|------|----------|
-| analyst | `demo-analyst-key` |
-| store_manager | `demo-store-manager-key` |
-| finance | `demo-finance-key` |
-| admin | `demo-admin-key` |
+| Role | Demo key | Store scope |
+|------|----------|-------------|
+| analyst | `demo-analyst-key` | - |
+| store_manager | `demo-store-manager-key` | `ST007` (see `src/api/auth.py`) |
+| finance | `demo-finance-key` | - |
+| admin | `demo-admin-key` | - |
 
 **Test endpoints:**
 ```bash
@@ -119,6 +121,7 @@ curl -H "X-API-Key: demo-analyst-key" http://localhost:8000/api/kpi/stockout-ris
 
 # Role-gated row-level views (masked vs. full PII/profit - see docs/STORAGE.md)
 curl -H "X-API-Key: demo-analyst-key" http://localhost:8000/api/analyst/sales
+curl -H "X-API-Key: demo-store-manager-key" http://localhost:8000/api/store-manager/sales  # only ST007 rows
 curl -H "X-API-Key: demo-finance-key" http://localhost:8000/api/finance/sales
 curl -H "X-API-Key: demo-admin-key" http://localhost:8000/api/admin/summary
 ```

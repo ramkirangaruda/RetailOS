@@ -1,146 +1,126 @@
-# Backend API Verification Report
+# Backend API Verification
 
-## ✅ Implementation Status: COMPLETE
-
-All required backend endpoints have been successfully implemented and are ready for frontend integration.
-
----
-
-## 1. KPI Functions in `kpi.py`
-
-All four required functions are implemented:
-
-### ✅ `get_daily_revenue()`
-- **Query**: Joins `fact_sales` with `dim_date`
-- **Returns**: List of `{date, revenue}` for last 30 days
-- **Order**: DESC (most recent first)
-
-### ✅ `get_city_sales()`
-- **Query**: Joins `fact_sales` with `dim_store`
-- **Returns**: City-wise sales with all required fields:
-  - `city`, `region`, `active_stores`, `total_revenue`
-  - `transaction_count`, `avg_transaction_value`
-  - `total_units_sold`, `revenue_share_pct`
-
-### ✅ `get_customer_distribution()`
-- **Query**: Joins `fact_sales` with `dim_customer`
-- **Returns**: Customer segmentation by city with:
-  - `city`, `city_tier` (Metro/Tier-1/Tier-2)
-  - `customer_count`, `total_revenue`, `avg_clv`
-  - `purchase_frequency_segment`, `value_segment`
-
-### ✅ `get_stockout_risks()`
-- **Query**: Joins `fact_sales` with `dim_product`
-- **Returns**: Inventory movement analysis with:
-  - `product_id`, `product_name`, `category`, `price`
-  - `total_sold`, `avg_daily_sales`, `movement_category`
-  - `projected_monthly_sales`, `projected_annual_sales`
+Reflects the API as it exists today, verified by actually running it
+(`uvicorn src.api.server:app`) and curling every route - not aspirational.
+A prior version of this document only covered 4 KPI functions and
+predates the auth layer entirely; both are out of date and replaced below.
 
 ---
 
-## 2. API Endpoints in `server.py`
+## 1. Authentication (added after the original version of this document)
 
-All four required endpoints are registered:
+Every route except `/health` requires an `X-API-Key` header, resolved to
+a role by `src/api/auth.py`. See `docs/STORAGE.md` for the full role
+matrix and the "what this doesn't cover" scope notes.
+
+Verified behavior:
+- No/unknown key -> `401`
+- Known key, insufficient role -> `403`
+- Known key, sufficient role -> `200` with real data
+
+Demo keys (override via `RETAILOS_API_KEYS` env var):
+`demo-analyst-key`, `demo-store-manager-key`, `demo-finance-key`,
+`demo-admin-key`.
+
+---
+
+## 2. KPI functions in `src/analytics/kpi.py`
+
+| Function | Verified? | Notes |
+|----------|-----------|-------|
+| `get_daily_revenue()` | ✅ | `fact_sales` join `dim_date`, last 30 days |
+| `get_city_sales()` | ✅ | `fact_sales` join `dim_store` |
+| `get_customer_distribution()` | ✅ | Real per-customer CLV (aggregated per customer, then averaged per city) and real day counts via `dim_date` (fixed a bug where `date_key` integers like `20240301` were subtracted directly, which is not a valid day count across month boundaries) |
+| `get_stockout_risks()` | ✅ | Sell-through velocity proxy from `fact_sales`/`dim_product` - does not use `fact_inventory` (see `get_inventory_turnover()` for that) |
+| `get_inventory_turnover()` | ✅ | Real turnover ratio using `fact_inventory.stock_level` |
+| `get_delivery_performance()` | ✅ | Real avg/min/max delivery time + on-time % from `fact_shipments` (previously this was a hardcoded `AVG(1)` placeholder that never touched shipment data at all) |
+| `get_top_product_pairs()` | ✅ | Real market-basket analysis (co-occurrence/confidence/lift); previously returned `[]` unconditionally |
+| `get_ai_decisions()` | ✅ | Real rows from `ml_reasoning_log`, parsed from `explanation_json`; previously returned `[]` unconditionally |
+
+---
+
+## 3. API endpoints in `src/api/server.py`
 
 ```python
-@app.get("/api/kpi/daily-revenue")       # ✅ Implemented
-@app.get("/api/kpi/city-sales")          # ✅ Implemented
-@app.get("/api/kpi/customer-distribution") # ✅ Implemented
-@app.get("/api/kpi/stockout-risks")      # ✅ Implemented
-```
+# Aggregate KPIs (role >= analyst)
+GET /api/kpi/daily-revenue
+GET /api/kpi/city-sales
+GET /api/kpi/customer-distribution
+GET /api/kpi/stockout-risks
+GET /api/kpi/inventory-turnover
+GET /api/kpi/delivery-performance
+GET /api/kpi/top-product-pairs
+GET /api/kpi/ai-decisions
 
-### Additional endpoints (for future use):
-- `/api/kpi/top-product-pairs` - Returns empty list (placeholder)
-- `/api/kpi/ai-decisions` - Returns empty list (placeholder)
+# Row-level views with masked/full PII (role-gated per view)
+GET /api/analyst/sales   # role >= analyst, masked phone/email
+GET /api/store-manager/sales  # role >= store_manager, masked, filtered to the caller's assigned store
+GET /api/finance/sales   # role >= finance, unmasked + profit
+GET /api/admin/summary   # role >= admin, aggregate row counts/revenue
+
+GET /health  # no auth required
+```
 
 ---
 
-## 3. CORS Configuration
-
-✅ **CORS is properly configured** for all origins:
+## 4. CORS configuration
 
 ```python
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows localhost:3000
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 ```
-
-This allows the Next.js frontend at `http://localhost:3000` to make requests.
-
----
-
-## 4. Code Quality Improvements
-
-### Fixed Issues:
-1. ✅ Removed duplicate `import duckdb` statements
-2. ✅ Unified database connection (single `con` object)
-3. ✅ Fixed endpoint naming consistency (hyphens, not underscores)
-4. ✅ Removed duplicate/unused routes
-5. ✅ Added proper docstrings to all functions
-6. ✅ Enhanced queries to return all fields matching TypeScript interfaces
-
-### Database Connection:
-- Single connection: `con = duckdb.connect("data/warehouse/retail.duckdb")`
-- Shared across all functions (no file locking issues)
-- Properly handles empty results
+`allow_origins=["*"]` is broad (fine for local dev; would want to scope
+this to the actual frontend origin(s) for a real deployment).
 
 ---
 
-## 5. Contract Compliance
+## 5. Database connections
 
-### Frontend TypeScript Interfaces → Backend Response
-
-| TypeScript Interface | Backend Function | Fields Match |
-|---------------------|------------------|--------------|
-| `DailyRevenue` | `get_daily_revenue()` | ✅ Yes |
-| `CitySales` | `get_city_sales()` | ✅ Yes |
-| `CustomerDistribution` | `get_customer_distribution()` | ✅ Yes |
-| `StockoutRisk` | `get_stockout_risks()` | ✅ Yes |
+Each request gets a short-lived connection via
+`src.storage.warehouse.get_connection()` (a context manager, closes on
+exit) - not one long-lived shared connection. Read paths use
+`read_only=True`. The RBAC views (`analyst_sales`/`finance_sales`/
+`admin_all`) are (re)created once at API startup via a `lifespan` hook,
+non-fatal if it fails (e.g. warehouse not built yet in a fresh environment).
 
 ---
 
-## 6. Server Restart Required
+## 6. Frontend contract compliance
 
-The uvicorn server with `--reload` flag should automatically detect changes and restart. If you see connection issues:
+| TypeScript interface | Backend function | Rendered in `page.tsx`? |
+|---|---|---|
+| `DailyRevenue` | `get_daily_revenue()` | ✅ |
+| `CitySales` | `get_city_sales()` | ✅ |
+| `CustomerDistribution` | `get_customer_distribution()` | ✅ |
+| `StockoutRisk` | `get_stockout_risks()` | ✅ |
+| `ProductPair` | `get_top_product_pairs()` | ✅ (previously the types/API function/component all existed but were never wired into `page.tsx` - a "Coming soon..." placeholder sat there instead; fixed) |
+| `AIDecision` | `get_ai_decisions()` | ✅ (same - `AIDecisionFeed.tsx` existed but was never rendered; fixed) |
 
-1. **Stop the current server** (Ctrl+C in the terminal)
-2. **Restart with:**
-   ```bash
-   uvicorn src.api.server:app --reload
-   ```
-
-3. **Verify endpoints are working:**
-   - http://localhost:8000/health
-   - http://localhost:8000/api/kpi/daily-revenue
-   - http://localhost:8000/api/kpi/city-sales
-   - http://localhost:8000/api/kpi/customer-distribution
-   - http://localhost:8000/api/kpi/stockout-risks
+`inventory-turnover` and `delivery-performance` have no frontend
+TypeScript type or component yet - they're real, working endpoints, just
+not surfaced in the Next.js dashboard.
 
 ---
 
-## 7. Production-Ready Checklist
+## 7. Verifying it yourself
 
-- ✅ All functions return JSON-serializable data (list of dicts)
-- ✅ Proper error handling (NULLIF for division by zero)
-- ✅ No duplicate imports or routes
-- ✅ CORS enabled for frontend
-- ✅ Single database connection (no locking issues)
-- ✅ Proper SQL joins between fact and dimension tables
-- ✅ Empty results handled safely (returns empty list `[]`)
-- ✅ Code is clean and well-documented
+```bash
+uvicorn src.api.server:app --reload
+curl http://localhost:8000/health
+curl -H "X-API-Key: demo-analyst-key" http://localhost:8000/api/kpi/daily-revenue
+curl -H "X-API-Key: demo-finance-key" http://localhost:8000/api/finance/sales
+curl -o /dev/null -w "%{http_code}\n" http://localhost:8000/api/kpi/daily-revenue  # expect 401, no key
+```
 
 ---
 
 ## Summary
 
-**All backend requirements are met.** The contract between frontend and backend is now aligned. Once the server restarts, the Next.js dashboard should display all data correctly.
-
-### Files Modified:
-- [src/analytics/kpi.py](file:///c:/Users/ramki/retail-os/src/analytics/kpi.py) - All 4 KPI functions implemented
-- [src/api/server.py](file:///c:/Users/ramki/retail-os/src/api/server.py) - All 4 endpoints registered
-
-No project structure changes were made. Only backend logic and route definitions were updated.
+The API surface described here has been run and curled directly, not just
+read from source - every status code and data shape above reflects an
+actual observed response, not an assumption about what the code should do.

@@ -90,25 +90,28 @@ Four roles, least to most privileged: `analyst` < `store_manager` <
 
 | Role | fact_sales access | PII | Financial data | Notes |
 |------|--------------------|-----|-----------------|-------|
-| **analyst** | `analyst_sales` view | Masked (phone/email) | None (no cost/profit) | |
-| **store_manager** | `store_manager_sales` view | Masked | None | **Not actually filtered by store today** - the view is currently identical to `analyst_sales`; the original comment in `access_control.py` says to filter by `store_key` at query time, but nothing enforces that automatically. Flagged here rather than silently claiming it works. |
-| **finance** | `finance_sales` view | Unmasked (name/email/phone) | Full, including per-line `profit` | |
-| **admin** | `admin_all` view (aggregate row counts/revenue per table) | N/A | Aggregate only | Not literally "full access to all dimensions" - it's a summary view, not row-level access to every table. |
+| **analyst** | `analyst_sales` view via `/api/analyst/sales` | Masked (phone/email) | None (no cost/profit) | |
+| **store_manager** | `store_manager_sales` view via `/api/store-manager/sales`, **filtered to the caller's assigned store** | Masked | None | Store assignment comes from the API key itself (`RETAILOS_API_KEYS` format `key:store_manager:STORE_ID`, e.g. `sm-st007-key:store_manager:ST007`) - verified end-to-end: a key assigned to `ST007` only ever gets `ST007` rows back. A `store_manager` key with no store assigned would get unfiltered results (same as a higher-privileged caller) - configure store keys with a store_id to avoid that. |
+| **finance** | `finance_sales` view via `/api/finance/sales` | Unmasked (name/email/phone) | Full, including per-line `profit` | |
+| **admin** | `admin_all` view via `/api/admin/summary` | N/A | Aggregate only | Not literally "full access to all dimensions" - it's a summary view, not row-level access to every table. |
 
 ### How enforcement actually works
-1. Every `/api/kpi/*`, `/api/analyst/*`, `/api/finance/*`, `/api/admin/*`
-   route in `src/api/server.py` depends on `require_role(...)` from
-   `src/api/auth.py`.
-2. The caller sends an `X-API-Key` header. `src/api/auth.py` maps it to a
-   role via the `RETAILOS_API_KEYS` env var (`key:role,key:role` format),
-   falling back to fixed demo keys if unset.
+1. Every `/api/kpi/*`, `/api/analyst/*`, `/api/store-manager/*`,
+   `/api/finance/*`, `/api/admin/*` route in `src/api/server.py` depends on
+   `require_role(...)` (or `require_identity(...)` for the store-scoped
+   route) from `src/api/auth.py`.
+2. The caller sends an `X-API-Key` header. `src/api/auth.py` resolves it
+   to an `Identity(role, store_id)` via the `RETAILOS_API_KEYS` env var
+   (`key:role` or `key:role:store_id` entries, comma-separated), falling
+   back to fixed demo keys if unset.
 3. A route's `require_role("finance")` rejects with `401` (no/unknown key)
    or `403` (known key, insufficient role) before the handler ever runs.
-4. Handlers for `/api/analyst/sales`, `/api/finance/sales`,
-   `/api/admin/summary` query the matching DuckDB view
-   (`src/analytics/secure_views.py`), so a `finance`-only column like
-   `profit` is only ever selected when the caller already passed the role
-   check for that route.
+4. Handlers for `/api/analyst/sales`, `/api/store-manager/sales`,
+   `/api/finance/sales`, `/api/admin/summary` query the matching DuckDB
+   view (`src/analytics/secure_views.py`); `/api/store-manager/sales`
+   additionally joins `dim_store` and filters by the caller's
+   `identity.store_id`. A `finance`-only column like `profit` is only ever
+   selected when the caller already passed the role check for that route.
 
 ### What this does *not* cover
 - **Anyone with direct access to `data/warehouse/retail.duckdb`** (a copy

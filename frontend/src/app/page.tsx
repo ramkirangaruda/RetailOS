@@ -6,6 +6,8 @@ import {
   getCitySales,
   getStockoutRisks,
   getCustomerDistribution,
+  getTopProductPairs,
+  getAIDecisions,
 } from '@/services/api';
 
 import StatCard from '@/components/dashboard/StatCard';
@@ -13,6 +15,8 @@ import RevenueChart from '@/components/dashboard/RevenueChart';
 import CitySalesChart from '@/components/dashboard/CitySalesChart';
 import StockoutTable from '@/components/dashboard/StockoutTable';
 import CustomerChart from '@/components/dashboard/CustomerChart';
+import ProductPairsTable from '@/components/dashboard/ProductPairsTable';
+import AIDecisionFeed from '@/components/dashboard/AIDecisionFeed';
 import { SkeletonCard, SkeletonChart, SkeletonTable } from '@/components/dashboard/LoadingSkeleton';
 
 export default function Home() {
@@ -20,6 +24,8 @@ export default function Home() {
   const { data: citySalesData, loading: citySalesLoading } = useApi(getCitySales);
   const { data: stockoutData, loading: stockoutLoading } = useApi(getStockoutRisks);
   const { data: customerData, loading: customerLoading } = useApi(getCustomerDistribution);
+  const { data: productPairsData, loading: productPairsLoading } = useApi(getTopProductPairs);
+  const { data: aiDecisionsData, loading: aiDecisionsLoading } = useApi(getAIDecisions);
 
   // Calculate summary stats from revenue data
   const totalRevenue = revenueData?.reduce((sum, d) => sum + d.revenue, 0) || 0;
@@ -115,11 +121,11 @@ export default function Home() {
             <CustomerChart data={customerData || []} />
           )}
 
-          {/* Placeholder for future chart */}
-          <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <h3 className="text-lg font-semibold text-white mb-4">Product Insights</h3>
-            <p className="text-gray-500">Coming soon...</p>
-          </div>
+          {productPairsLoading ? (
+            <SkeletonChart />
+          ) : (
+            <ProductPairsTable data={productPairsData || []} />
+          )}
         </div>
 
         {/* Inventory Table */}
@@ -128,6 +134,15 @@ export default function Home() {
             <SkeletonTable />
           ) : (
             <StockoutTable data={stockoutData || []} />
+          )}
+        </div>
+
+        {/* AI Decision Feed */}
+        <div className="mb-8">
+          {aiDecisionsLoading ? (
+            <SkeletonChart />
+          ) : (
+            <AIDecisionFeed data={aiDecisionsData || []} />
           )}
         </div>
       </div>
