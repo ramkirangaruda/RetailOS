@@ -23,6 +23,11 @@ data/quarantine/
 *.sqlite
 *.duckdb
 
+# Small committed sample of the final analytical tables (deliverable) -
+# not the full generated dataset, which stays gitignored above.
+!docs/sample_dataset/
+!docs/sample_dataset/*.csv
+
 # ===============================
 # ML artifacts
 # ===============================
