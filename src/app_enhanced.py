@@ -69,7 +69,7 @@ with st.sidebar:
     
     # Model status
     st.subheader("ML Models")
-    models = ['Stockout Classifier', 'Reorder Regressor', 'Prophet (50 combos)']
+    models = ['Stockout Classifier', 'Reorder Regressor']
     for model in models:
         st.write(f"✅ {model}")
 
@@ -115,32 +115,48 @@ with tab1:
 
     # Stockout risks with ML predictions
     st.subheader("🚨 ML-Predicted Stockout Risks")
-    
+
     try:
-        risks = con.execute("""
-        SELECT 
+        latest = con.execute("""
+        SELECT
             ml.store_id,
             ml.product_id,
             dp.name as product_name,
             ds.store_name,
-            ml.current_stock,
-            ml.prophet_7d_forecast,
-            ml.days_remaining_forecast,
-            ml.risk_level,
-            ml.ml_confidence,
-            ml.optimal_reorder_qty
+            ml.prediction as recommended_reorder,
+            ml.confidence,
+            ml.explanation_json
         FROM ml_reasoning_log ml
         JOIN dim_product dp ON ml.product_id = dp.product_id
         JOIN dim_store ds ON ml.store_id = ds.store_id
-        WHERE ml.risk_level >= 2  -- High or Critical
-        AND ml.timestamp = (
+        WHERE ml.timestamp = (
             SELECT MAX(timestamp) FROM ml_reasoning_log ml2
             WHERE ml2.store_id = ml.store_id AND ml2.product_id = ml.product_id
         )
-        ORDER BY ml.days_remaining_forecast ASC
-        LIMIT 20
         """).fetchdf()
-        
+
+        def _parse_explanation(raw):
+            try:
+                return json.loads(raw) if raw else {}
+            except (TypeError, json.JSONDecodeError):
+                return {}
+
+        latest["explanation"] = latest["explanation_json"].apply(_parse_explanation)
+        latest["risk_level"] = latest["explanation"].apply(lambda e: e.get("risk_level", "Unknown"))
+        latest["current_stock"] = latest["explanation"].apply(lambda e: e.get("current_stock", 0))
+        latest["avg_daily_demand"] = latest["explanation"].apply(lambda e: e.get("avg_daily_demand", 0))
+        # Simple stock-runway estimate (current_stock / avg_daily_demand), NOT a
+        # forecast model — no Prophet or other time-series forecasting is
+        # implemented anywhere in this codebase.
+        latest["days_remaining"] = latest.apply(
+            lambda r: round(r["current_stock"] / r["avg_daily_demand"], 1) if r["avg_daily_demand"] else None,
+            axis=1,
+        )
+
+        risks = latest[latest["risk_level"].isin(["High", "Critical"])].sort_values(
+            "days_remaining", na_position="last"
+        ).head(20)
+
         if not risks.empty:
             for _, row in risks.iterrows():
                 with st.container(border=True):
@@ -148,8 +164,9 @@ with tab1:
                     c1.write(f"**{row['store_name']}**")
                     c2.write(row['product_name'])
                     c3.metric("Stock", f"{row['current_stock']:.0f}")
-                    c4.metric("Days", f"{row['days_remaining_forecast']:.1f}", 
-                               delta=f"{row['ml_confidence']:.0%} conf", delta_color="inverse")
+                    days_label = f"{row['days_remaining']:.1f}" if row['days_remaining'] is not None else "N/A"
+                    c4.metric("Days Remaining", days_label,
+                               delta=f"{row['confidence']:.0%} conf", delta_color="inverse")
                     c5.button("Reorder", key=f"ro_{row['store_id']}_{row['product_id']}")
         else:
             st.success("✅ No high-risk stockouts predicted")
@@ -172,77 +189,64 @@ with tab1:
 ## TAB 2: ML REASONING EXPLORER
 with tab2:
     st.header("🤖 ML Model Reasoning Explorer")
-    
+
     try:
         # Select a recent prediction
         recent_predictions = con.execute("""
-        SELECT 
-            timestamp,
-            store_id,
-            product_id,
-            risk_level,
-            ml_confidence
+        SELECT id, timestamp, store_id, product_id, prediction, confidence, explanation_json
         FROM ml_reasoning_log
         ORDER BY timestamp DESC
         LIMIT 50
         """).fetchdf()
-        
+
         if not recent_predictions.empty:
-            selected = st.selectbox(
+            def _risk_level(raw):
+                try:
+                    return json.loads(raw).get("risk_level", "Unknown") if raw else "Unknown"
+                except (TypeError, json.JSONDecodeError):
+                    return "Unknown"
+
+            recent_predictions["risk_level"] = recent_predictions["explanation_json"].apply(_risk_level)
+
+            options = recent_predictions["id"].tolist()
+            labels = {
+                row["id"]: f"{row['timestamp']} | Store {row['store_id']} | Product {row['product_id']} | Risk: {row['risk_level']}"
+                for _, row in recent_predictions.iterrows()
+            }
+            selected_id = st.selectbox(
                 "Select a prediction to examine:",
-                recent_predictions.apply(
-                    lambda x: f"{x['timestamp']} | Store {x['store_id']} | Product {x['product_id']} | Risk: {x['risk_level']}", 
-                    axis=1
-                )
+                options,
+                format_func=lambda i: labels[i],
             )
-            
-            if selected:
-                # Parse selection to find row
-                selected_ts = selected.split('|')[0].strip()
-                
-                # Get full explanation
-                full = con.execute(f"""
-                SELECT * FROM ml_reasoning_log
-                WHERE CAST(timestamp AS VARCHAR) = '{selected_ts}'
-                LIMIT 1
-                """).fetchdf()
-                
-                if not full.empty:
-                    row = full.iloc[0]
-                    
-                    # Display reasoning
-                    c1, c2, c3 = st.columns(3)
-                    c1.metric("ML Confidence", f"{row['ml_confidence']:.1%}")
-                    risk_labels = ['Safe', 'Moderate', 'High', 'Critical']
-                    risk_idx = min(int(row['risk_level']), 3)
-                    c2.metric("Risk Level", risk_labels[risk_idx])
-                    c3.metric("Recommended Reorder", f"{row['optimal_reorder_qty']:.0f} units")
-                    
-                    st.subheader("📊 Prediction Factors")
-                    
-                    # Create factor visualization
-                    factors = {
-                        'Current Stock': row['current_stock'],
-                        'Avg Daily Demand': row['avg_sales_7d'],
-                        'Demand Volatility': row['demand_volatility_cv'],
-                        'Prophet 7d Forecast': row['prophet_7d_forecast']
-                    }
-                    
-                    fig = go.Figure(data=[
-                        go.Bar(x=list(factors.keys()), y=list(factors.values()))
-                    ])
-                    fig.update_layout(title="Key Factors in Prediction", height=400)
-                    st.plotly_chart(fig, use_container_width=True)
-                    
-                    # Prophet forecast details
-                    st.subheader("📈 Prophet 7-Day Forecast")
-                    st.info(f"""
-                    **Forecast**: {row['prophet_7d_forecast']:.1f} units over next 7 days
-                    
-                    **Upper Bound**: {row['prophet_upper_bound']:.1f} units (worst case)
-                    
-                    **Lower Bound**: {row['prophet_lower_bound']:.1f} units (best case)
-                    """)
+
+            row = recent_predictions[recent_predictions["id"] == selected_id].iloc[0]
+            try:
+                explanation = json.loads(row["explanation_json"]) if row["explanation_json"] else {}
+            except (TypeError, json.JSONDecodeError):
+                explanation = {}
+
+            # Display reasoning
+            c1, c2, c3 = st.columns(3)
+            c1.metric("ML Confidence", f"{row['confidence']:.1%}")
+            c2.metric("Risk Level", explanation.get("risk_level", "Unknown"))
+            c3.metric("Recommended Reorder", f"{row['prediction']:.0f} units")
+
+            st.subheader("📊 Prediction Factors")
+
+            # Create factor visualization. No Prophet or other time-series
+            # forecasting is implemented anywhere in this codebase, so only
+            # the features the classifier/regressor actually saw are shown.
+            factors = {
+                'Current Stock': explanation.get('current_stock', 0),
+                'Avg Daily Demand': explanation.get('avg_daily_demand', 0),
+                'Demand Volatility (CV)': explanation.get('volatility_cv', 0),
+            }
+
+            fig = go.Figure(data=[
+                go.Bar(x=list(factors.keys()), y=list(factors.values()))
+            ])
+            fig.update_layout(title="Key Factors in Prediction", height=400)
+            st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No ML predictions found in log.")
     except Exception as e:
