@@ -9,6 +9,9 @@ services:
       UVICORN_WORKERS: ${UVICORN_WORKERS:-1}
       WS_HOST: ${WS_HOST:-localhost}
       WS_PORT: ${WS_PORT:-8765}
+      # Role-based API keys, format 'key1:role1,key2:role2'. Demo defaults
+      # are used if unset - see src/api/auth.py.
+      RETAILOS_API_KEYS: ${RETAILOS_API_KEYS:-}
     ports:
       - "${BACKEND_PORT:-8000}:8000"
     volumes:
@@ -21,11 +24,13 @@ services:
       dockerfile: Dockerfile.frontend
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+        NEXT_PUBLIC_API_KEY: ${NEXT_PUBLIC_API_KEY:-demo-analyst-key}
     environment:
       PORT: 3000
       HOSTNAME: 0.0.0.0
-      # NOTE: client bundle uses build-time NEXT_PUBLIC_API_URL
+      # NOTE: client bundle uses build-time NEXT_PUBLIC_API_URL/NEXT_PUBLIC_API_KEY
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+      NEXT_PUBLIC_API_KEY: ${NEXT_PUBLIC_API_KEY:-demo-analyst-key}
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
     depends_on:

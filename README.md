@@ -97,12 +97,31 @@ uvicorn src.api.server:app --reload
 
 **Output:** API running at `http://localhost:8000`
 
+**Auth:** every `/api/kpi/*`, `/api/analyst/*`, `/api/finance/*`, and
+`/api/admin/*` route requires an `X-API-Key` header (role-based access
+control, see `src/api/auth.py`). `/health` does not. Demo keys for local
+development (override via `RETAILOS_API_KEYS` env var):
+
+| Role | Demo key |
+|------|----------|
+| analyst | `demo-analyst-key` |
+| store_manager | `demo-store-manager-key` |
+| finance | `demo-finance-key` |
+| admin | `demo-admin-key` |
+
 **Test endpoints:**
-- http://localhost:8000/health
-- http://localhost:8000/api/kpi/daily-revenue
-- http://localhost:8000/api/kpi/city-sales
-- http://localhost:8000/api/kpi/customer-distribution
-- http://localhost:8000/api/kpi/stockout-risks
+```bash
+curl http://localhost:8000/health
+curl -H "X-API-Key: demo-analyst-key" http://localhost:8000/api/kpi/daily-revenue
+curl -H "X-API-Key: demo-analyst-key" http://localhost:8000/api/kpi/city-sales
+curl -H "X-API-Key: demo-analyst-key" http://localhost:8000/api/kpi/customer-distribution
+curl -H "X-API-Key: demo-analyst-key" http://localhost:8000/api/kpi/stockout-risks
+
+# Role-gated row-level views (masked vs. full PII/profit - see docs/STORAGE.md)
+curl -H "X-API-Key: demo-analyst-key" http://localhost:8000/api/analyst/sales
+curl -H "X-API-Key: demo-finance-key" http://localhost:8000/api/finance/sales
+curl -H "X-API-Key: demo-admin-key" http://localhost:8000/api/admin/summary
+```
 
 ---
 
@@ -117,6 +136,7 @@ npm install
 
 # Create environment file
 echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
+echo "NEXT_PUBLIC_API_KEY=demo-analyst-key" >> .env.local
 
 # Start development server
 npm run dev
@@ -191,17 +211,17 @@ python src/ingestion/batch_scheduler.py
 
 ### 2. Streamlit Dashboard (localhost:8501)
 - **Tab 1:** Live stockout alerts with ML confidence
-- **Tab 2:** ML reasoning with Prophet forecasts
+- **Tab 2:** ML reasoning explorer (current stock / avg daily demand / demand volatility - no forecasting model is implemented)
 - **Tab 3:** Schema evolution history
 - **Tab 4:** Pipeline performance metrics
 
 ### 3. API Endpoints (localhost:8000)
-All endpoints return JSON:
+All endpoints (except `/health`) require an `X-API-Key` header - see Step 5 above:
 ```bash
-curl http://localhost:8000/api/kpi/daily-revenue
+curl -H "X-API-Key: demo-analyst-key" http://localhost:8000/api/kpi/daily-revenue
 # Returns: [{"date": "2026-02-13", "revenue": 125000.50}, ...]
 
-curl http://localhost:8000/api/kpi/city-sales
+curl -H "X-API-Key: demo-analyst-key" http://localhost:8000/api/kpi/city-sales
 # Returns: [{"city": "Mumbai", "total_revenue": 5000000, ...}, ...]
 ```
 
@@ -253,8 +273,10 @@ uvicorn src.api.server:app --reload
 
 ### Frontend shows "No data"
 1. Ensure backend is running on port 8000
-2. Check `.env.local` has correct API URL
+2. Check `.env.local` has correct API URL and `NEXT_PUBLIC_API_KEY`
 3. Verify CORS is enabled in `src/api/server.py`
+4. A `401`/`403` in the browser console means the API key is missing, wrong,
+   or doesn't have the role a route requires - see Step 5's auth table
 
 ### ML models not found
 ```bash

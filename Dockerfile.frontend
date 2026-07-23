@@ -13,7 +13,9 @@ WORKDIR /app
 
 # Build-time public env vars (baked into client bundle)
 ARG NEXT_PUBLIC_API_URL=http://localhost:8000
+ARG NEXT_PUBLIC_API_KEY=demo-analyst-key
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV NEXT_PUBLIC_API_KEY=${NEXT_PUBLIC_API_KEY}
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY frontend/ ./

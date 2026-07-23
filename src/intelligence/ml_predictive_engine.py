@@ -230,3 +230,11 @@ class MLPredictiveEngine:
                 json.dumps(explanation),
             ],
         )
+
+
+if __name__ == "__main__":
+    print("Training stockout classifier + reorder regressor on current fact_inventory/fact_sales data...")
+    engine = MLPredictiveEngine()
+    print(f"Done. Category encoding: {engine.category_map}")
+    if engine._single_class_risk is not None:
+        print(f"Note: training data had only one risk class ({engine._single_class_risk}); classifier not fit.")

@@ -1,7 +1,28 @@
 #!/usr/bin/env python3
 """
-RBAC and PII Masking Implementation for RetailOS
-Creates secure views in DuckDB with role-based access control
+RBAC and PII Masking Implementation for RetailOS.
+
+Creates secure DuckDB views (analyst_sales, store_manager_sales,
+finance_sales, admin_all) that mask customer PII and restrict financial
+detail depending on role.
+
+verify_schema(con) and create_rbac_views(con) are library functions that
+take an existing connection and raise a plain exception on failure -
+they're safe to call from the API's startup path (see src/api/server.py)
+without killing the whole process. Running this file directly still gives
+the original CLI behavior: connect, verify, create views, print samples,
+and exit(1) on failure, for standalone/manual use.
+
+IMPORTANT SCOPE NOTE: these views only govern access for callers that go
+through the FastAPI layer (src/api/server.py), which is the only place
+this project enforces role checks (see src/api/auth.py). Anyone who opens
+data/warehouse/retail.duckdb directly - e.g. a BI tool, notebook, or copy
+of the file - bypasses these views entirely and can query fact_sales /
+dim_customer unmasked. DuckDB is an embedded, single-file database with no
+native per-user GRANT/REVOKE system, so enforcing this at the file level
+isn't possible without moving to a client-server database; the mitigation
+here is applicaton-layer access control plus keeping the .duckdb file off
+of anything but the API/dashboard processes (documented in docs/STORAGE.md).
 """
 
 import duckdb
@@ -10,59 +31,60 @@ import sys
 DB_PATH = "data/warehouse/retail.duckdb"
 
 
-def create_rbac_views():
-    """Create RBAC views with PII masking in DuckDB"""
-    
-    try:
-        # Connect to database
-        print("🔗 Connecting to DuckDB database...")
-        con = duckdb.connect(DB_PATH)
-        print(f"✓ Connected to {DB_PATH}")
-        
-        # Drop existing views
-        print("\n🗑️  Dropping existing views...")
-        con.execute("DROP VIEW IF EXISTS analyst_sales")
-        con.execute("DROP VIEW IF EXISTS store_manager_sales") 
-        con.execute("DROP VIEW IF EXISTS finance_sales")
-        con.execute("DROP VIEW IF EXISTS admin_all")
-        print("✓ Dropped existing views")
-        
-        # Create analyst_sales view with PII masking
-        print("\n👁️  Creating analyst_sales view with PII masking...")
-        analyst_view_sql = """
+def verify_schema(con: duckdb.DuckDBPyConnection) -> None:
+    """Verify the database schema before creating views. Raises RuntimeError on failure."""
+    tables = con.execute("SHOW TABLES").fetchdf()
+    required_tables = ['fact_sales', 'dim_customer', 'dim_product', 'dim_store', 'dim_date']
+    for table in required_tables:
+        if table not in tables['name'].values:
+            raise RuntimeError(f"Required table {table} not found in database")
+
+    fact_sales_columns = con.execute("DESCRIBE fact_sales").fetchdf()
+    required_fact_columns = ['sale_id', 'date_key', 'customer_key', 'product_key', 'store_key', 'quantity', 'revenue']
+    for col in required_fact_columns:
+        if col not in fact_sales_columns['column_name'].values:
+            raise RuntimeError(f"Required column {col} not found in fact_sales")
+
+    customer_columns = con.execute("DESCRIBE dim_customer").fetchdf()
+    required_customer_columns = ['customer_key', 'name', 'email', 'phone', 'city']
+    for col in required_customer_columns:
+        if col not in customer_columns['column_name'].values:
+            raise RuntimeError(f"Required column {col} not found in dim_customer")
+
+    product_columns = con.execute("DESCRIBE dim_product").fetchdf()
+    required_product_columns = ['product_key', 'name', 'category', 'price']
+    for col in required_product_columns:
+        if col not in product_columns['column_name'].values:
+            raise RuntimeError(f"Required column {col} not found in dim_product")
+
+
+def create_rbac_views(con: duckdb.DuckDBPyConnection) -> None:
+    """Create/replace RBAC views with PII masking. Raises on failure."""
+    con.execute("DROP VIEW IF EXISTS analyst_sales")
+    con.execute("DROP VIEW IF EXISTS store_manager_sales")
+    con.execute("DROP VIEW IF EXISTS finance_sales")
+    con.execute("DROP VIEW IF EXISTS admin_all")
+
+    con.execute("""
         CREATE VIEW analyst_sales AS
-        SELECT 
-            fs.sale_id,
-            fs.date_key,
-            fs.product_key,
-            fs.store_key,
-            fs.quantity,
-            fs.revenue,
+        SELECT
+            fs.sale_id, fs.date_key, fs.product_key, fs.store_key,
+            fs.quantity, fs.revenue,
             CONCAT('XXXXX-', RIGHT(dc.phone, 4)) as phone_masked,
             CONCAT(LEFT(dc.email, 1), '***@', SPLIT_PART(dc.email, '@', 2)) as email_masked,
             dc.city as customer_city
         FROM fact_sales fs
         JOIN dim_customer dc ON fs.customer_key = dc.customer_key
-        """
-        con.execute(analyst_view_sql)
-        print("✓ Created analyst_sales view")
-        
-        # Create store_manager_sales view (same as analyst, filtered at query time)
-        print("\n🏪 Creating store_manager_sales view...")
-        store_manager_view_sql = """
+    """)
+
+    con.execute("""
         CREATE VIEW store_manager_sales AS
-        SELECT *
-        FROM analyst_sales
-        """
-        con.execute(store_manager_view_sql)
-        print("✓ Created store_manager_sales view")
-        print("ℹ️  Note: Filter by store_key at query time: SELECT * FROM store_manager_sales WHERE store_key = ?")
-        
-        # Create finance_sales view with full access
-        print("\n💰 Creating finance_sales view with full access...")
-        finance_view_sql = """
+        SELECT * FROM analyst_sales
+    """)
+
+    con.execute("""
         CREATE VIEW finance_sales AS
-        SELECT 
+        SELECT
             fs.*,
             dc.name as customer_name,
             dc.email,
@@ -75,173 +97,73 @@ def create_rbac_views():
         FROM fact_sales fs
         JOIN dim_customer dc ON fs.customer_key = dc.customer_key
         JOIN dim_product dp ON fs.product_key = dp.product_key
-        """
-        con.execute(finance_view_sql)
-        print("✓ Created finance_sales view")
-        
-        # Create admin_all view for system-wide access
-        print("\n👑 Creating admin_all view...")
-        admin_view_sql = """
+    """)
+
+    con.execute("""
         CREATE VIEW admin_all AS
-        SELECT 
-            'fact_sales' as table_name,
-            COUNT(*) as row_count,
-            MIN(date_key) as min_date_key,
-            MAX(date_key) as max_date_key,
+        SELECT
+            'fact_sales' as table_name, COUNT(*) as row_count,
+            MIN(date_key) as min_date_key, MAX(date_key) as max_date_key,
             SUM(revenue) as total_revenue
         FROM fact_sales
-        
         UNION ALL
-        
-        SELECT 
-            'dim_customer' as table_name,
-            COUNT(*) as row_count,
-            NULL as min_date_key,
-            NULL as max_date_key,
-            NULL as total_revenue
-        FROM dim_customer
-        
+        SELECT 'dim_customer', COUNT(*), NULL, NULL, NULL FROM dim_customer
         UNION ALL
-        
-        SELECT 
-            'dim_product' as table_name,
-            COUNT(*) as row_count,
-            NULL as min_date_key,
-            NULL as max_date_key,
-            NULL as total_revenue
-        FROM dim_product
-        
+        SELECT 'dim_product', COUNT(*), NULL, NULL, NULL FROM dim_product
         UNION ALL
-        
-        SELECT 
-            'dim_store' as table_name,
-            COUNT(*) as row_count,
-            NULL as min_date_key,
-            NULL as max_date_key,
-            NULL as total_revenue
-        FROM dim_store
-        
+        SELECT 'dim_store', COUNT(*), NULL, NULL, NULL FROM dim_store
         UNION ALL
-        
-        SELECT 
-            'dim_date' as table_name,
-            COUNT(*) as row_count,
-            MIN(date_key) as min_date_key,
-            MAX(date_key) as max_date_key,
-            NULL as total_revenue
-        FROM dim_date
-        """
-        con.execute(admin_view_sql)
-        print("✓ Created admin_all view")
-        
-        # Verify views and get row counts
-        print("\n📊 Verifying views and getting row counts...")
-        
-        # Count rows from analyst_sales
+        SELECT 'dim_date', COUNT(*), MIN(date_key), MAX(date_key), NULL FROM dim_date
+    """)
+
+
+def _run_cli() -> None:
+    print("🚀 RetailOS RBAC and PII Masking Implementation")
+    print("=" * 50)
+
+    con = duckdb.connect(DB_PATH)
+    try:
+        print("\n🔗 Verifying schema...")
+        verify_schema(con)
+        print("✓ Schema verification passed")
+
+        print("\n🗑️  Creating RBAC views...")
+        create_rbac_views(con)
+        print("✓ Created: analyst_sales, store_manager_sales, finance_sales, admin_all")
+
         analyst_count = con.execute("SELECT COUNT(*) FROM analyst_sales").fetchone()[0]
-        print(f"✓ analyst_sales: {analyst_count:,} rows")
-        
-        # Count rows from finance_sales  
         finance_count = con.execute("SELECT COUNT(*) FROM finance_sales").fetchone()[0]
+        print(f"✓ analyst_sales: {analyst_count:,} rows")
         print(f"✓ finance_sales: {finance_count:,} rows")
-        
-        # Show sample data for verification
+
         print("\n🔍 Sample data verification:")
         print("\n--- analyst_sales sample (PII masked) ---")
-        analyst_sample = con.execute("""
-            SELECT sale_id, phone_masked, email_masked, customer_city, revenue 
-            FROM analyst_sales 
-            LIMIT 3
-        """).fetchdf()
-        print(analyst_sample.to_string(index=False))
-        
+        print(con.execute(
+            "SELECT sale_id, phone_masked, email_masked, customer_city, revenue FROM analyst_sales LIMIT 3"
+        ).fetchdf().to_string(index=False))
+
         print("\n--- finance_sales sample (full access) ---")
-        finance_sample = con.execute("""
-            SELECT sale_id, customer_name, email, phone, profit 
-            FROM finance_sales 
-            LIMIT 3
-        """).fetchdf()
-        print(finance_sample.to_string(index=False))
-        
+        print(con.execute(
+            "SELECT sale_id, customer_name, email, phone, profit FROM finance_sales LIMIT 3"
+        ).fetchdf().to_string(index=False))
+
         print("\n--- admin_all sample ---")
-        admin_sample = con.execute("SELECT * FROM admin_all").fetchdf()
-        print(admin_sample.to_string(index=False))
-        
-        # Close connection
-        con.close()
+        print(con.execute("SELECT * FROM admin_all").fetchdf().to_string(index=False))
+
         print("\n✅ RBAC views created successfully!")
-        print("🔐 Database is now secure with role-based access control and PII masking")
-        
+        print("🔐 Database views are ready for role-based, PII-masked access.")
+        print("\n📋 Usage Examples:")
+        print("  SELECT * FROM analyst_sales WHERE revenue > 1000;")
+        print("  SELECT * FROM store_manager_sales WHERE store_key = 5;")
+        print("  SELECT customer_name, profit FROM finance_sales WHERE profit > 0;")
+        print("  SELECT * FROM admin_all;")
+
     except Exception as e:
-        print(f"❌ Error creating RBAC views: {e}")
+        print(f"❌ Error: {e}")
         sys.exit(1)
-
-
-def verify_schema():
-    """Verify the database schema before creating views"""
-    try:
-        con = duckdb.connect(DB_PATH)
-        
-        # Check required tables exist
-        tables = con.execute("SHOW TABLES").fetchdf()
-        required_tables = ['fact_sales', 'dim_customer', 'dim_product', 'dim_store', 'dim_date']
-        
-        for table in required_tables:
-            if table not in tables['name'].values:
-                raise Exception(f"Required table {table} not found in database")
-        
-        print("✓ All required tables exist")
-        
-        # Check key columns
-        fact_sales_columns = con.execute("DESCRIBE fact_sales").fetchdf()
-        required_fact_columns = ['sale_id', 'date_key', 'customer_key', 'product_key', 'store_key', 'quantity', 'revenue']
-        
-        for col in required_fact_columns:
-            if col not in fact_sales_columns['column_name'].values:
-                raise Exception(f"Required column {col} not found in fact_sales")
-        
-        customer_columns = con.execute("DESCRIBE dim_customer").fetchdf()
-        required_customer_columns = ['customer_key', 'name', 'email', 'phone', 'city']
-        
-        for col in required_customer_columns:
-            if col not in customer_columns['column_name'].values:
-                raise Exception(f"Required column {col} not found in dim_customer")
-        
-        product_columns = con.execute("DESCRIBE dim_product").fetchdf()
-        required_product_columns = ['product_key', 'name', 'category', 'price']
-        
-        for col in required_product_columns:
-            if col not in product_columns['column_name'].values:
-                raise Exception(f"Required column {col} not found in dim_product")
-        
+    finally:
         con.close()
-        print("✓ Schema verification passed")
-        
-    except Exception as e:
-        print(f"❌ Schema verification failed: {e}")
-        sys.exit(1)
 
 
 if __name__ == "__main__":
-    print("🚀 RetailOS RBAC and PII Masking Implementation")
-    print("=" * 50)
-    
-    # Verify schema first
-    verify_schema()
-    
-    # Create RBAC views
-    create_rbac_views()
-    
-    print("\n🎉 Implementation completed successfully!")
-    print("\n📋 Usage Examples:")
-    print("  # Analyst access (PII masked)")
-    print("  SELECT * FROM analyst_sales WHERE revenue > 1000;")
-    print("")
-    print("  # Store Manager access (store filtered)")
-    print("  SELECT * FROM store_manager_sales WHERE store_key = 5;")
-    print("")
-    print("  # Finance access (full data)")
-    print("  SELECT customer_name, profit FROM finance_sales WHERE profit > 0;")
-    print("")
-    print("  # Admin access (system overview)")
-    print("  SELECT * FROM admin_all;")
+    _run_cli()

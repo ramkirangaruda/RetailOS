@@ -10,6 +10,11 @@ import type {
 } from '@/types/kpi';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+// NOTE: this ships in the client bundle (NEXT_PUBLIC_*), which is fine for
+// demonstrating that the API enforces role-based access, but is NOT how a
+// real secret should be handled - a production app would proxy these calls
+// through a Next.js server-side route so the key never reaches the browser.
+const API_KEY = process.env.NEXT_PUBLIC_API_KEY || 'demo-analyst-key';
 
 class ApiError extends Error {
     constructor(
@@ -24,7 +29,9 @@ class ApiError extends Error {
 
 async function fetchApi<T>(endpoint: string): Promise<T> {
     try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`);
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            headers: { 'X-API-Key': API_KEY },
+        });
 
         if (!response.ok) {
             throw new ApiError(
