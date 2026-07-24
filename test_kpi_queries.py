@@ -9,6 +9,13 @@ import os
 import sys
 from pathlib import Path
 
+# Windows consoles default to a codepage (e.g. cp1252) that can't print
+# non-ASCII characters this script's output includes (e.g. the Rupee sign
+# in kpi_queries.sql's summary query) - force UTF-8 so a query that
+# succeeded doesn't get reported as [FAIL] just because print() choked.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 DB_PATH = "data/warehouse/retail.duckdb"
 KPI_QUERIES_FILE = "src/analytics/kpi_queries.sql"
 
@@ -96,14 +103,13 @@ def test_rbac_views():
     """Test RBAC views creation"""
     try:
         from src.storage.access_control import create_rbac_views
-        
+
         print("[INFO] Testing RBAC views creation...", flush=True)
-        create_rbac_views()
-        
         con = duckdb.connect(DB_PATH)
-        
+        create_rbac_views(con)
+
         # Test each view
-        views = ['analyst_sales', 'finance_sales', 'admin_all']
+        views = ['analyst_sales', 'store_manager_sales', 'finance_sales', 'admin_all']
         
         for view in views:
             try:

@@ -75,16 +75,17 @@ python src/storage/warehouse_builder.py
 ## Step 4: Train ML Models
 
 ```bash
-# Train all ML models
+# Train the stockout classifier + reorder regressor
 python src/intelligence/ml_predictive_engine.py
 ```
 
-**Output:** Creates models in `models/`:
-- `stockout_classifier.pkl` - Random Forest for risk classification
-- `reorder_regressor.pkl` - Gradient Boosting for reorder quantities
-- `prophet_{product}_{store}.pkl` - Prophet models for demand forecasting
-
-**Expected:** ~85% accuracy on stockout classifier, R² > 0.7 on regressor
+**Output:** trains a Random Forest (stockout risk classifier) and a
+Gradient Boosting regressor (reorder quantity) against `fact_inventory`/
+`fact_sales`. Models are **not persisted to disk** - they live in memory
+for the lifetime of the process (this script, the API, or a Streamlit
+session) and retrain from scratch on every new `MLPredictiveEngine()`.
+There is no Prophet component - see `docs/ai_usage_overview.md` for what's
+actually implemented vs. not.
 
 ---
 
@@ -298,11 +299,11 @@ python src/storage/warehouse_builder.py
 ## 📚 Key Technologies
 
 - **Backend:** FastAPI, DuckDB, Python
-- **Frontend:** Next.js 15, React, TypeScript, Tailwind CSS
-- **ML:** Prophet, scikit-learn, pandas
+- **Frontend:** Next.js 16, React, TypeScript, Tailwind CSS
+- **ML:** scikit-learn (Random Forest + Gradient Boosting), pandas
 - **Streaming:** WebSocket, asyncio
 - **Scheduling:** APScheduler
-- **Visualization:** Plotly, Recharts
+- **Visualization:** Plotly (Streamlit dashboard only); the Next.js dashboard's charts are hand-built with CSS (no charting library)
 
 ---
 

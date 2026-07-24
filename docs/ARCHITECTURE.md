@@ -63,7 +63,7 @@ flowchart TD
 
     subgraph Analytics["Analytics (src/analytics/, src/intelligence/)"]
         KPI["kpi.py + kpi_queries.sql\nrevenue, city sales, CLV, inventory\nturnover, delivery performance,\nmarket basket, stockout risk"]
-        ML["intelligence/ml_predictive_engine.py\nRandomForest (stockout risk) +\nGradientBoosting (reorder qty),\ntrained on fact_inventory/fact_sales.\nNo Prophet/forecasting model exists\ndespite requirements.txt listing it."]
+        ML["intelligence/ml_predictive_engine.py\nRandomForest (stockout risk) +\nGradientBoosting (reorder qty),\ntrained on fact_inventory/fact_sales.\nNo Prophet/forecasting model exists."]
     end
 
     DIMS --> KPI
@@ -104,7 +104,7 @@ flowchart TD
 | Partitioning | Implemented and does prune correctly, but measured *slower* than a plain DuckDB scan at this data volume - see `docs/STORAGE.md` for real numbers and why. |
 | RBAC / PII masking | Real, and now actually enforced at the API layer via `src/api/auth.py` - not just decorative views. Scope boundary: doesn't cover direct access to the `.duckdb` file itself (see `docs/STORAGE.md`). |
 | ML stockout/reorder models | Real - trained on actual `fact_inventory`/`fact_sales` data (previously silently fell back to random dummy data because it queried columns that didn't exist). |
-| Demand forecasting (Prophet) | **Not implemented.** `prophet` is listed in `requirements.txt` and mentioned in older docs/README text, but never imported anywhere in `src/`. Any "forecast" language elsewhere refers to a simple current-stock/avg-daily-demand runway estimate, not a real time-series model. |
+| Demand forecasting (Prophet) | **Not implemented.** `prophet` was previously listed in `requirements.txt` despite never being imported anywhere in `src/` - removed. Any "forecast" language elsewhere refers to a simple current-stock/avg-daily-demand runway estimate, not a real time-series model. |
 | API auth | Real, demo-scoped (see `src/api/auth.py`'s docstring) - not production-grade credential management. |
 | Dashboards | `src/app_enhanced.py` is the canonical Streamlit dashboard (two prior duplicates deleted). Its Schema Evolution and Pipeline Monitoring tabs are fully working; its ML tabs were rewritten to match the real `ml_reasoning_log` schema. `frontend/` (Next.js) is the canonical web dashboard (a stale `retailos-frontend/` duplicate was deleted). |
 

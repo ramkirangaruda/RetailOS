@@ -49,13 +49,21 @@ else:
                 WHERE queue_id = ?
                 """, [row["queue_id"]])
 
+                # Scoped by table_name + status=action so approving one
+                # queue entry doesn't also flip unrelated pending changes
+                # on other tables that happen to share the same action
+                # label (e.g. two different tables both with
+                # status='manual_review'). There's no shared batch id
+                # between schema_change_log and schema_approval_queue, so
+                # this is still an approximation if the same table has
+                # multiple pending 'manual_review' batches at once.
                 con.execute("""
                 UPDATE schema_change_log
                 SET status = 'approved',
                     approved_at = CURRENT_TIMESTAMP,
                     approved_by = 'admin'
-                WHERE status = ?
-                """, [row["action"]])
+                WHERE status = ? AND table_name = ?
+                """, [row["action"], row["table_name"]])
 
                 st.success("Approved successfully.")
                 st.rerun()
@@ -73,8 +81,8 @@ else:
                 SET status = 'rejected',
                     approved_at = CURRENT_TIMESTAMP,
                     approved_by = 'admin'
-                WHERE status = ?
-                """, [row["action"]])
+                WHERE status = ? AND table_name = ?
+                """, [row["action"], row["table_name"]])
 
                 st.warning("Rejected successfully.")
                 st.rerun()

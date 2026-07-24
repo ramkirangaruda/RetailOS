@@ -38,9 +38,11 @@ effectively meaningless; that's fixed):
 - **Output**: `recommended_reorder` (units).
 
 ### What does NOT exist
-- **No Prophet forecasting.** `prophet` is listed in `requirements.txt`
-  and mentioned in some older docs/dashboard labels, but is never imported
-  anywhere in `src/`. There is no per-product-store demand forecast, no
+- **No Prophet forecasting.** `prophet` was previously listed in
+  `requirements.txt` despite never being imported anywhere in `src/` -
+  removed, since installing it (a heavy dependency) for zero actual use
+  just slowed down a fresh `pip install` for no benefit. There is no
+  per-product-store demand forecast, no
   festival/holiday detection, no confidence-interval forecast.
 - **No `train_stockout_classifier()`/`train_reorder_amount_regressor()`/
   `train_demand_forecaster()` methods.** `MLPredictiveEngine` trains both

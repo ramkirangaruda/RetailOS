@@ -39,7 +39,7 @@ if st.button("Predict Stockout Risk"):
             st.error(f"🔴 Risk Level: {risk_label}")
         elif risk_label == "High":
             st.warning(f"🟠 Risk Level: {risk_label}")
-        elif risk_label == "Moderate":
+        elif risk_label == "Medium":
             st.info(f"🟡 Risk Level: {risk_label}")
         else:
             st.success(f"🟢 Risk Level: {risk_label}")

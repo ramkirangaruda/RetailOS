@@ -2,6 +2,11 @@
 import sys
 import os
 
+# Windows consoles default to a codepage that can't print this script's
+# emoji status markers - force UTF-8 so that doesn't crash the run.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 # Add project root to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -16,26 +21,16 @@ def main():
         # Connect to DuckDB
         con = duckdb.connect("data/warehouse/retail.duckdb")
 
-        # Initialize engine
+        # Initialize engine. MLPredictiveEngine has no separate
+        # train_stockout_classifier()/train_reorder_amount_regressor()
+        # methods - both models train automatically inside __init__ (see
+        # _train_models()), so constructing the engine IS the training step.
+        print("1️⃣ Training stockout classifier + reorder regressor...")
         engine = MLPredictiveEngine()
-
-        # -------------------------------
-        # Test 1: Train Stockout Classifier
-        # -------------------------------
-        print("1️⃣ Training Stockout Classifier...")
-        accuracy, importance = engine.train_stockout_classifier()
-        print(f"✅ Accuracy: {accuracy:.2%}\n")
-
-        print("Feature Importance:")
-        print(importance)
-        print()
-
-        # -------------------------------
-        # Test 2: Train Reorder Regressor
-        # -------------------------------
-        print("2️⃣ Training Reorder Regressor...")
-        score = engine.train_reorder_amount_regressor()
-        print(f"✅ R² Score: {score:.2f}\n")
+        if engine._single_class_risk is not None:
+            print(f"⚠️ Training data had only one risk class ({engine._single_class_risk}); classifier not fit.\n")
+        else:
+            print(f"✅ Trained. Category encoding: {engine.category_map}\n")
 
         # -------------------------------
         # Test 3: Make Sample Prediction

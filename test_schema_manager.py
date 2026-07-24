@@ -1,6 +1,13 @@
+import sys
+
 from src.ingestion.adaptive_schema_manager import AdaptiveSchemaManager
 import pandas as pd
 import duckdb
+
+# Windows consoles default to a codepage that can't print this script's
+# emoji status markers - force UTF-8 so that doesn't crash the run.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 if __name__ == "__main__":
 
